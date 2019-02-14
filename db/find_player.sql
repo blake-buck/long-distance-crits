@@ -1,0 +1,1 @@
+SELECT * FROM player WHERE username=$1;

@@ -1,0 +1,1 @@
+SELECT * FROM user_in_game WHERE game_id=$1;

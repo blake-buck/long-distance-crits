@@ -1,0 +1,1 @@
+DELETE FROM user_in_game WHERE user_id=$1 AND game_id=$2;
