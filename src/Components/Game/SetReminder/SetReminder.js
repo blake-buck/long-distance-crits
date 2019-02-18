@@ -29,7 +29,6 @@ class SetReminder extends Component{
         var {recipients, reminderDate, reminderTime} = this.state;
         
         axios.post('/email/reminder', {recipients, dateTime:reminderDate +" "+ reminderTime}).then(results => {
-            console.log(results);
             this.setState({isOpen:false, recipients:"", });
         })
     }

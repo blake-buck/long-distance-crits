@@ -56,8 +56,14 @@ function getUser(req, res) {
     res.status(200).json(req.session.user);
 }
 
+function logout(req,res){
+    req.session.destroy();
+	res.json(req.session);
+}
+
 module.exports ={
     register,
     login, 
-    getUser
+    getUser,
+    logout
 }

@@ -17,10 +17,26 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
 const styles = theme =>({
+    container:{
+        display:'flex',
+        width:'100%',
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    img:{
+        [ theme.breakpoints.down('sm')]:{display:'none'},
+        [ theme.breakpoints.up('md')]:
+        {
+            width:'60%',
+            height:'90vh',
+            margin:0
+        }
+        
+    },
     card:{
         height:350,
         [ theme.breakpoints.down('sm')]:{width:'100%'},
-        [ theme.breakpoints.up('md')]:{maxWidth:500}
+        [ theme.breakpoints.up('md')]:{maxWidth:500, width:'30%'}
     },
     cardActions:{
         display:'flex',
@@ -70,7 +86,7 @@ class Register extends Component{
         var {username, password, confirmPassword, openDialog} = this.state;
         var {classes} = this.props;
         return(
-            <div>
+            <div className={classes.container}>
                 <Dialog open={openDialog} onClose={()=>this.closeDialog()}>
                     <DialogContent>
                         <DialogContentText>
@@ -81,7 +97,8 @@ class Register extends Component{
                         <Button onClick={()=>this.closeDialog()}>Close</Button>
                     </DialogActions>
                 </Dialog>
-
+                
+                <img src='https://openclipart.org/download/169898/1336369712.svg' alt='Knight' className={classes.img}/>
                 <Card className={classes.card}>
                     <CardContent>
                         <Typography variant='h4' component='h2'>

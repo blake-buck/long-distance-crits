@@ -1,10 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
-import CharSheet from '../Game/CharSheet/CharSheet.js';
-
-
-
 
 //Material UI imports
 import PropTypes from 'prop-types';
@@ -18,11 +14,27 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import FormControl from '@material-ui/core/FormControl';
 
+//styles are declared here
 const styles = theme =>({
+    container:{
+        display:'flex',
+        width:'100%',
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    img:{
+        [ theme.breakpoints.down('sm')]:{display:'none'},
+        [ theme.breakpoints.up('md')]:
+        {
+            width:'60%',
+            height:'90vh',
+            margin:0
+        }
+    },
     card:{
         height:300,
         [ theme.breakpoints.down('sm')]:{width:'100%'},
-        [ theme.breakpoints.up('md')]:{maxWidth:500}
+        [ theme.breakpoints.up('md')]:{maxWidth:500, width:'30%'}
     },
     cardActions:{
         display:'flex',
@@ -54,22 +66,21 @@ class Login extends Component{
     submitLogin(){
         var {username, password} = this.state;
         axios.post('/auth/login', {username, password}).then((results)=>{
-            console.log(results);
+            //if the user enters in the correct information they are pushed to the create game component
             this.props.history.push(`/creategame`);
         })
     }
-
-
-
-
-    
 
     render(){
         var {username, password} = this.state;
         const {classes} = this.props;
 
+        //The knight img will eventually be replaced with AWS/Firebase
         return(
-            <div>
+            <div className={classes.container}>
+                
+                <img src='https://openclipart.org/download/169898/1336369712.svg' alt='Knight' className={classes.img}/>
+
                 <Card className={classes.card}>
                     <CardContent>
                         <Typography variant='h4' component='h2'>
@@ -103,7 +114,6 @@ class Login extends Component{
                     </CardActions>
                     
                 </Card>
-                
                 
             </div>
             

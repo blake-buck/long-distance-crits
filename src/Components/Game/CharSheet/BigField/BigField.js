@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {updateCharSheet} from '../../../../ducks/reducer';
 
 //materialUI imports
 import PropTypes from 'prop-types';
@@ -19,35 +21,38 @@ const styles = theme => ({
 class BigField extends Component{
     constructor(props){
         super(props);
-        this.state={
-            defaultValue:this.props.defaultValue
-        }
-        this.render = this.render.bind(this);
-    }
-
-    componentDidMount(){
-        this.setState({defaultValue:this.props.defaultValue})
     }
 
     componentDidUpdate(prevProps){
-        if(prevProps != this.props){
-            this.setState({defaultValue:this.props.defaultValue})
+        if(prevProps !== this.props){
+            
         }
     }
 
-    handleChange(id, e){
-        var {game, columnTitle}= this.props;
-        axios.put(`/api/user/${this.props.game}/charsheet`, {columnTitle, value:e.target.value})
-        this.setState({[id]:e.target.value});
+    handleChange(e){
+       var {game, columnTitle, charsheet} = this.props;
+       var input = e.target.value;
+       this.props.updateCharSheet(game, columnTitle, input, charsheet);
+       console.log('firing handleChange');
+       this.setState({})
     }
 
     render(){
-        var {classes} = this.props;
-        var {defaultValue} = this.state
+        var {classes, charsheet, columnTitle, defaultValue} = this.props;
+        var value='';
+
+        if(this.props.charsheet[columnTitle]){
+            value = this.props.charsheet[columnTitle];
+        }
+        else {
+            value = defaultValue
+        }
+
         return(
             <Grid item xs={this.props.desktopWidth} >
               <Paper>
-                <Input multiline fullWidth rows={this.props.rows} className={classes.overflow} value={defaultValue} onChange={(e)=>{this.handleChange('defaultValue', e);  }}/>
+                  <button onClick={()=>console.log(columnTitle)}>alkdfsj;</button>
+                <Input multiline fullWidth rows={this.props.rows} className={classes.overflow} value={value} onChange={(e)=>this.handleChange(e)}/>
 
                 <Typography component='p'>
                     {this.props.label}
@@ -63,5 +68,10 @@ class BigField extends Component{
 BigField.propTypes ={
     classes: PropTypes.object.isRequired
 }
-
-export default withStyles(styles)(BigField);
+const mapStateToProps =(state) => {
+    return{
+        charsheet:state.charsheet
+    }
+};
+//
+export default withStyles(styles)(connect(mapStateToProps, {updateCharSheet})(BigField));

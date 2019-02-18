@@ -4,6 +4,7 @@ import CreateGameButton from './CreateGameButton/CreateGameButton.js';
 import GameCard from './GameCard/GameCard.js';
 import JoinGame from './JoinGame/JoinGame.js';
 import {Redirect, Link} from 'react-router-dom';
+import LoadingScreen from '../LoadingScreen/LoadingScreen.js';
 
 //Material UI imports
 import PropTypes from 'prop-types';
@@ -47,15 +48,15 @@ class CreateGame extends Component{
         }
         this.componentDidMount = this.componentDidMount.bind(this);
     }
-    logout(){
-        axios.get('/auth/logout');
-    }
+
     componentDidMount(){
         axios.get('/auth/getuser').then(results => {
+            //If the user successfully logs in they are given a cookie containing their username
+            //This checks to see if the user has a username, if they dont they are booted back to the 
+            //login page, if they do it gets all the games the user is part of and adds them to state
             if(results.data.username !==undefined){     
 
                 axios.get('/api/games').then(games => {
-                    console.log(games, "Request went through fine");
                     this.setState({
                         username:results.data.username,
                         player_id:results.data.id,
@@ -65,10 +66,16 @@ class CreateGame extends Component{
                 })
 
             }
+            else{
+                this.props.history.push('/');
+            }
         })
     }
 
-    
+    //This logs out the user using req.session.destroy
+    logout(){
+        axios.get('/auth/logout');
+    }    
 
     render(){
         const {classes} = this.props;
@@ -92,6 +99,7 @@ class CreateGame extends Component{
                             </Button>
                         </Toolbar>
                     </AppBar>
+
                     <Paper className={classes.paper}>
                         <CreateGameButton componentDidMount={this.componentDidMount} />
                         {
@@ -101,8 +109,9 @@ class CreateGame extends Component{
                         }
                     </Paper>
                 </div>)  
+                
                 :
-                 <div>You need to login before you can view this page</div>}
+                 <LoadingScreen />}
             </div>
 
         );

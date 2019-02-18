@@ -1,0 +1,1 @@
+SELECT title, game_type FROM game WHERE game_id=$1;

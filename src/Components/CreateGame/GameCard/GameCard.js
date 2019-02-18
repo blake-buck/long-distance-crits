@@ -14,12 +14,35 @@ import axios from 'axios';
 
 const styles = themes => ({
     cardContent:{
-        textAlign:'left'
+        textAlign:'left',
     }
 })
 
 class GameCard extends Component{
 
+    constructor(props){
+        super(props);
+        this.state={
+            gameTitle:'',
+            gameType:'',
+            playerNumber:0
+        }
+    }
+
+    //This makes it so that the information displayed on a game card is dynamic by getting information such as gameTitle, type, and player number from the  database
+    componentDidMount(){
+        axios.get(`/api/game/${this.props.game_id}`).then(results => {
+            console.log(results)
+            this.setState({
+                gameTitle:results.data.gameInfo[0].title,
+                gameType:results.data.gameInfo[0].game_type,
+                playerNumber:results.data.playerNumber
+            })
+        })
+    }
+
+
+    //deleteGame doesnt delete the entire game, it just deletes the current user from the game
     deleteGame(){
         axios.delete(`/api/${this.props.game_id}`).then( ()=>{
             this.props.componentDidMount();
@@ -33,11 +56,17 @@ class GameCard extends Component{
             <Card>
                 <CardContent className={classes.cardContent}>
                     <Typography component='p'>
-                        Players:
+                        Title: {this.state.gameTitle}
                     </Typography>
+
                     <Typography component='p'>
-                        Hours Played:
+                        Type: {this.state.gameType}
                     </Typography>
+
+                    <Typography component='p'>
+                        Number of Players: {this.state.playerNumber}
+                    </Typography>
+
                     <Button component={Link} to={`/game/${this.props.game_id}`}>
                         Start Game
                     </Button>

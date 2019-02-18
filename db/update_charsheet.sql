@@ -8,7 +8,7 @@ charclass=$35, charlevel=$36, race=$37, background=$38, alignment=$39, playernam
 initiative=$43, speed=$44, hp_max=$45, hp=$46, temp_hp=$47, hitdice_total=$48,
 hitdice=$49, deathsave_successes=$50, deathsave_failures=$51, attacks_spellcasting=$52, 
 equipment=$53, copper=$54, silver=$55, gold=$56, platinum=$57, personality=$58, ideals=$59, 
-bonds=$60, flaws=$61, features_traits=$62, languages_proficiencies=$63
+bonds=$60, flaws=$61, features_traits=$62, languages_proficiencies=$63, character_name=$64
 
 
 

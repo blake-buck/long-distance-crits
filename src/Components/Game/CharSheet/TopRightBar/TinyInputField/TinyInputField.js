@@ -1,7 +1,6 @@
-import React, {Component} from 'react';
-import axios from 'axios';
+import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {updateCharSheet} from '../../../../ducks/reducer'
+import {updateCharSheet} from '../../../../../ducks/reducer';
 
 //materialUI imports
 import PropTypes from 'prop-types';
@@ -11,25 +10,17 @@ import Paper from '@material-ui/core/Paper';
 import Input from '@material-ui/core/Input';
 import Grid from '@material-ui/core/Grid';
 
-
 const styles = theme => (
     {
     inputClass:{
-        fontSize:'3.5em',
+        fontSize:'1em',
+        fontWeight:'bold'
     }
 })
 
-class SmallField extends Component{
-    constructor(props){
-        super(props);
-    }
-    componentDidUpdate(prevProps){
-        if(prevProps !== this.props){
+class TinyInputField extends Component{
 
-        }
-    }
-
-    handleChange(id, e){
+    handleChange(e){
         var {game, columnTitle, type, charsheet}= this.props;
         var input = e.target.value;
         var checker = input.match(/[1-9]/g);
@@ -38,7 +29,7 @@ class SmallField extends Component{
 
         if(type==='number'){
             if(checker){
-                this.props.updateCharSheet(game, columnTitle, input, charsheet);
+                this.props.updateCharSheet(game, columnTitle, Number(checker.join('')), charsheet);
             }
         }
         else if(type==='text'){
@@ -49,7 +40,8 @@ class SmallField extends Component{
 
     render(){
         var {classes, charsheet, columnTitle, defaultValue} = this.props;
-        var value='';
+        var value ='';
+        //console.log(this.props);
 
         if(this.props.charsheet[columnTitle]){
             value = this.props.charsheet[columnTitle];
@@ -57,25 +49,21 @@ class SmallField extends Component{
         else {
             value = defaultValue
         }
-
         return(
-            <Grid item xs={this.props.desktopWidth} >
-              <Paper>
-              <button onClick={()=>console.log(this.props.charsheet)}>alkdfsj;</button>
-                <Input className={classes.inputClass} value={value} type={this.props.type} onChange={(e)=>this.handleChange('defaultValue', e)}/>
-
-                <Typography component='p'>
-                    {this.props.label}
-                </Typography>
-
-
-              </Paper>
+            <Grid item xs={4}>
+                <Paper elevation={1}>
+                    <Input className={classes.inputClass} value={value} onChange={(e)=>this.handleChange(e)}/>
+                    <Typography component='p'>
+                        {this.props.label}
+                    </Typography>
+                </Paper>
             </Grid>
         )
     }
+
 }
 
-SmallField.propTypes ={
+TinyInputField.propTypes ={
     classes: PropTypes.object.isRequired
 }
 
@@ -85,4 +73,4 @@ const mapStateToProps =(state) => {
     }
 };
 
-export default withStyles(styles)(connect(mapStateToProps, {updateCharSheet})(SmallField));
+export default withStyles(styles)(connect(mapStateToProps, {updateCharSheet})(TinyInputField));

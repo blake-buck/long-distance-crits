@@ -28,7 +28,7 @@ const styles = theme => ({
 })
 
 
-
+//CreateGame creates a new game and adds it to the database
 class CreateGameButton extends Component{
     
     constructor(props){
@@ -54,7 +54,6 @@ class CreateGameButton extends Component{
 
     openCreateGameDialog(){
         var {createGameOpen} = this.state;
-        console.log("firing opneCreateGameDialog");
         this.setState({createGameOpen:!createGameOpen});
     }
 

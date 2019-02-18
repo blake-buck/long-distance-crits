@@ -32,10 +32,10 @@ class Chat extends Component{
         super(props);
         this.state={
             messages:[],
-            socket:io(),
             inputContent:'',
             room:this.props.gameID,
-            username:this.props.username
+            username:this.props.username,
+            socket:this.props.socket
         }
         this.componentDidMount = this.componentDidMount.bind(this);
     }
@@ -43,13 +43,11 @@ class Chat extends Component{
         var {messages, socket, room} = this.state;
 
         socket.on('connect', ()=>{
-            console.log('room');
             socket.emit('room', room)
         })
 
         socket.on('chat message', (message) => {
             messages.push({message, username:this.state.username });
-            console.log(messages);
             this.setState({messages});
         })
 
@@ -92,6 +90,11 @@ class Chat extends Component{
     }
     handleChange(e){
         this.setState({inputContent:e.target.value})
+    }
+
+    componentWillUnmount(){
+        var {socket} = this.state;
+        socket.close();
     }
 
     render(){

@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
 import Konva from 'konva';
 import {Stage, Layer, Text, Circle, Rect, Line} from 'react-konva';
+import {connect} from 'react-redux';
+import {updateLines} from '../../../ducks/reducer';
 import io from 'socket.io-client';
+import DrawTools from './DrawTools/DrawTools.js';
 
 //MaterialUI imports
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
 
 const styles = theme => ({
     stageContainer:{
@@ -24,40 +28,49 @@ class Canvas extends Component{
             lines:[],
             currentLine:[],
             isDrawing:false,
-            socket:io(),
             room:this.props.gameID,
             username:this.props.username
         }
     }
 
     componentDidMount(){
-        var {socket, room, lines} = this.state;
+        console.log(this.props);
 
-        socket.on('connect', ()=>{
-            console.log('room');
-            socket.emit('room', room)
-            
-        })
-
-        socket.on('canvas connection', (lines)=>{
-            this.setState({lines:lines});
-        })
-
+        var {lines}=this.props;
+        var {gameID, socket} = this.props;
+        
+        // socket.emit('canvas connection');
+        // socket.on('canvas connection', (newLines)=>{
+        //     console.log(newLines)
+        // })
+        
         socket.on('draw', (newLines) => {
-            this.setState({lines:newLines});
+            this.setState({lines:newLines})
         })
+        this.setState({lines:lines})
+    }
+
+    
+    componentDidUpdate(prevProps){
+        if(prevProps !== this.props){
+            this.setState({lines:this.props.lines});
+        }
     }
 
     emitDrawing(){
-        var {socket, lines} = this.state;
+        var {lines} = this.state;
+        var {socket} = this.props;
         socket.emit('draw', lines);
     }
 
     beginLine(e){
-        var {isDrawing, currentLine, lines} = this.state;
-        currentLine.push(e.evt.layerX, e.evt.layerY);
-        lines.push([e.evt.layerX, e.evt.layerY]);
-        this.setState({isDrawing:true, lines})
+        if(this.props.selectedTool === 'draw'){
+            var {isDrawing, currentLine, lines} = this.state;
+            //currentLine.push(e.evt.layerX, e.evt.layerY);
+            lines.push([e.evt.layerX, e.evt.layerY]);
+
+            this.setState({isDrawing:true})
+        }
     }
 
     drawLine(e){
@@ -66,17 +79,26 @@ class Canvas extends Component{
             currentLine.push(e.evt.layerX, e.evt.layerY);
             lines[lines.length-1].push(e.evt.layerX, e.evt.layerY)
             lines.push(currentLine);
+            
             this.setState({isDrawing:true, lines, currentLine:[]})
         }
     }
 
     endLine(e){
-        var {currentLine, lines} = this.state;
-        
-        //lines[lines.length-1].push([e.evt.layerX, e.evt.layerY]);
-        lines.push(currentLine);
-        this.emitDrawing();
-        this.setState({isDrawing:false, lines})
+        if(this.props.selectedTool === 'draw'){
+            var {currentLine, lines} = this.state;
+            //this.props.updateLines(currentLine);
+            lines[lines.length-1].push([e.evt.layerX, e.evt.layerY]);
+            //lines.push(currentLine);
+            this.setState({isDrawing:false, lines})
+            this.props.updateLines(this.state.lines);
+            this.emitDrawing();
+        }
+    }
+
+    componentWillUnmount(){
+        console.log('UNMOUNTING');
+        this.props.updateLines(this.props.lines);
     }
 
 
@@ -84,7 +106,7 @@ class Canvas extends Component{
         var {lines} = this.state;
         var {classes} = this.props;
         return(
-        
+        <Paper>
         <div className={classes.stageContainer}>
             <Stage width={700} height={700} onMouseDown={(e)=>this.beginLine(e)} onMouseMove={(e)=>this.drawLine(e)} onMouseUp={(e)=>this.endLine(e)}>
                 <Layer>
@@ -96,6 +118,8 @@ class Canvas extends Component{
                 </Layer>
             </Stage>        
         </div>
+        <DrawTools />
+        </Paper>
         );
     }
 
@@ -105,4 +129,11 @@ Canvas.propTypes ={
     classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(Canvas);
+const mapStateToProps =(state) => {
+    return{
+        lines:state.lines,
+        selectedTool:state.selectedTool
+    }
+};
+
+export default withStyles(styles)(connect(mapStateToProps, {updateLines})(Canvas))

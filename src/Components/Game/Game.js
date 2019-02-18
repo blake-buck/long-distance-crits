@@ -1,11 +1,16 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-
+import io from 'socket.io-client';
 
 import Canvas from './Canvas/Canvas.js';
 import SetReminder from './SetReminder/SetReminder.js';
 import CharSheet from './CharSheet/CharSheet.js';
 import Chat from './Chat/Chat.js';
+import LoadingScreen from '../LoadingScreen/LoadingScreen.js';
+
+import {connect} from 'react-redux';
+import {getCharSheet, updateLines} from '../../ducks/reducer';
+
 
 //MaterialUI imports
 import PropTypes from 'prop-types';
@@ -31,7 +36,9 @@ class Game extends Component{
             isGM:false,
             tabValue:0,
             charsheet:{},
-            username:''
+            username:'',
+
+            socket:io()
         }
         this.handleTabChange = this.handleTabChange.bind(this);
     }
@@ -39,21 +46,33 @@ class Game extends Component{
     componentDidMount(){
         var room=this.props.match.params.id;
         var {socket} = this.state;    
+        socket.on('connect', ()=>{
+            console.log('Can i get a connection?');
+            socket.emit('room', this.props.match.params.id)
+        })
+        
         axios.get('/auth/getuser').then(results => {
             //POSSIBLE ERROR: if results.data is undefined, this should break my code
             if(results.data.username !== undefined){
-                console.log(this.props.match.params.id);
+
                 axios.get(`/api/users/${this.props.match.params.id}`).then(results2 => {
                     results2.data.map((val) => {
                         if(val.user_id === results.data.id && val.is_gm === 'true'){
-                            this.setState({isAuthorized:true, isGM:true, username:results.data.username})
-                           
+                            this.props.getCharSheet(room).then(results3 => {
+                                this.setState({isAuthorized:true, isGM:true, username:results.data.username, charsheet:results3.value.data[0]})
+                            });
                         }
                         else if(val.user_id === results.data.id){
-                            this.setState({isAuthorized:true, username:results.data.username})
+                            this.props.getCharSheet(room).then(results3 => {
+                                
+                                this.setState({isAuthorized:true, username:results.data.username, charsheet:results3.value.data[0]})
+                            });
+                            
                         }
                         
                     })
+
+                    
                     
                 }) 
             }
@@ -61,12 +80,6 @@ class Game extends Component{
                 this.props.history.push('/');
             }
         })
-    }
-
-    componentDidUpdate(prevProps, prevState){
-        if(prevState !== this.state){
-            console.log(prevState, this.state);
-        }
     }
 
     handleChange(id, e){
@@ -77,8 +90,15 @@ class Game extends Component{
         this.setState({tabValue:value})
     }
 
+    componentWillUnmount(){
+        var {socket} = this.state;
+        console.log(this.props.lines);
+        this.props.updateLines([])
+        console.log(this.props.lines);
+        socket.close();
+    }
+
     render(){
-        console.log(this.props);
         var {isAuthorized, tabValue} = this.state;
         var chatWidth=3;
         var otherWidth =9;
@@ -106,15 +126,13 @@ class Game extends Component{
                             {tabValue===2 &&  <CharSheet gameID={this.props.match.params.id} charsheet={this.state.charsheet} handleChange={this.handleChange} />}
                         </Grid>
                         <Grid item xs={chatWidth}>
-                            <Chat username={this.state.username} gameID={this.props.match.params.id}/>
+                            <Chat username={this.state.username} gameID={this.props.match.params.id} socket={this.state.socket}/>
                         </Grid>
                     </Grid>
                 </div>
                 )
                 :
-                (
-                <p>You are not authorized to view this element</p>
-                )
+                <LoadingScreen />
                 }
             </div>
         );
@@ -125,4 +143,11 @@ class Game extends Component{
 Game.propTypes ={
     classes: PropTypes.object.isRequired
 }
-export default withStyles(styles)(Game);
+const mapStateToProps =(state) => {
+    return{
+        charsheet:state.charsheet,
+        lines:state.lines
+    }
+};
+//
+export default withStyles(styles)(connect(mapStateToProps, {getCharSheet, updateLines})(Game));
