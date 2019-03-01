@@ -11,10 +11,12 @@ function createGame(req, res){
 	const db = req.app.get('db');
 
 	bcrypt.hash(req.body.createGamePassword, 12).then(hashedPassword => {
-		db.create_game(req.body.createGameTitle, hashedPassword).then(results => {
+		db.create_game(req.body.createGameTitle, hashedPassword, req.body.width, req.body.height).then(results => {
 			db.add_user_into_game(results[0].game_id, req.session.user.id, 'true').then(results2 =>{
 				db.create_charsheet(req.session.user.id, results[0].game_id).then(results3 => {
-					res.json(results2);
+					db.create_questlog(results[0].game_id).then(results4 => {
+						res.json(results2);
+					})
 				})
 			})
 		})

@@ -1,0 +1,1 @@
+SELECT questlog_id FROM questlog WHERE game=$1;

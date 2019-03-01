@@ -8,6 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
 
 class SetReminder extends Component{
@@ -15,7 +16,7 @@ class SetReminder extends Component{
         super(props);
         
         this.state={
-            isOpen:this.props.isGM,
+            isOpen:false,
             recipients:'',
             reminderDate:'',
             reminderTime:''
@@ -39,6 +40,7 @@ class SetReminder extends Component{
 
     render(){
         return(
+            <div>
             <Dialog open={this.state.isOpen}>
                 <DialogTitle>Set a Game Reminder</DialogTitle>
                 <DialogContent>
@@ -55,6 +57,10 @@ class SetReminder extends Component{
                     <Button onClick={()=>this.sendEmail()}>Submit</Button>
                 </DialogActions>
             </Dialog>
+            
+            <Button fullWidth onClick={()=>this.setState({isOpen:true})}>Set Reminder</Button>
+            
+            </div>
         );
     }
 

@@ -13,6 +13,11 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Unchecked from '@material-ui/icons/RadioButtonUnchecked';
 import Checked from '@material-ui/icons/RadioButtonChecked';
 
+const styles = theme => ({
+    button:{
+        width:'1.6vw'
+    }
+})
 
 class DeathSaves extends Component{
     constructor(props){
@@ -72,20 +77,21 @@ class DeathSaves extends Component{
     }
 
     render(){
+        var {classes} = this.props;
         var {saveChecks, failChecks}=this.state;
         return(
             <Paper>
                 <Grid container>
                     <Grid item xs={12}>
-                        <Checkbox checked={saveChecks[0]} value='0' checkedIcon={<Checked />} icon={<Unchecked />} onChange={(e, boolean)=>this.handleSaveChange(e, boolean)}/>
-                        <Checkbox checked={saveChecks[1]} value='1' checkedIcon={<Checked />} icon={<Unchecked />} onChange={(e, boolean)=>this.handleSaveChange(e, boolean)}/>
-                        <Checkbox checked={saveChecks[2]} value='2' checkedIcon={<Checked />} icon={<Unchecked />} onChange={(e, boolean)=>this.handleSaveChange(e, boolean)}/>
+                        <Checkbox checked={saveChecks[0]} value='0' checkedIcon={<Checked className={classes.button}/>} icon={<Unchecked className={classes.button}/>} onChange={(e, boolean)=>this.handleSaveChange(e, boolean)}/>
+                        <Checkbox checked={saveChecks[1]} value='1' checkedIcon={<Checked className={classes.button}/>} icon={<Unchecked className={classes.button}/>} onChange={(e, boolean)=>this.handleSaveChange(e, boolean)}/>
+                        <Checkbox checked={saveChecks[2]} value='2' checkedIcon={<Checked className={classes.button}/>} icon={<Unchecked className={classes.button}/>} onChange={(e, boolean)=>this.handleSaveChange(e, boolean)}/>
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Checkbox checked={failChecks[0]} value='0' checkedIcon={<Checked />} icon={<Unchecked />} onChange={(e, boolean)=>this.handleFailChange(e, boolean)}/>
-                        <Checkbox checked={failChecks[1]} value='1' checkedIcon={<Checked />} icon={<Unchecked />} onChange={(e, boolean)=>this.handleFailChange(e, boolean)}/>
-                        <Checkbox checked={failChecks[2]} value='2' checkedIcon={<Checked />} icon={<Unchecked />} onChange={(e, boolean)=>this.handleFailChange(e, boolean)}/>
+                        <Checkbox checked={failChecks[0]} value='0' checkedIcon={<Checked className={classes.button}/>} icon={<Unchecked className={classes.button}/>} onChange={(e, boolean)=>this.handleFailChange(e, boolean)}/>
+                        <Checkbox checked={failChecks[1]} value='1' checkedIcon={<Checked className={classes.button}/>} icon={<Unchecked className={classes.button}/>} onChange={(e, boolean)=>this.handleFailChange(e, boolean)}/>
+                        <Checkbox checked={failChecks[2]} value='2' checkedIcon={<Checked className={classes.button}/>} icon={<Unchecked className={classes.button}/>} onChange={(e, boolean)=>this.handleFailChange(e, boolean)}/>
                     </Grid>
                 </Grid>
                 <Typography>
@@ -97,6 +103,9 @@ class DeathSaves extends Component{
 
 }
 
+DeathSaves.propTypes={
+    classes: PropTypes.object.isRequired
+}
 const mapStateToProps =(state) => state;
 
-export default connect(mapStateToProps, {updateFailChecks, updateSaveChecks, updateCharSheet})(DeathSaves);
+export default withStyles(styles)(connect(mapStateToProps, {updateFailChecks, updateSaveChecks, updateCharSheet})(DeathSaves));

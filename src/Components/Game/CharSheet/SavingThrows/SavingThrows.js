@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import SavingThrowComponent from './SavingThrowComponent/SavingThrowComponent.js';
 
 //materialUI imports
 import PropTypes from 'prop-types';
@@ -10,6 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField  from '@material-ui/core/TextField';
 
 
+
 const styles = theme => ({
     inputClass:{
         fontSize:'0.5em'
@@ -18,22 +20,16 @@ const styles = theme => ({
 
 class SavingThrows extends Component{
     render(){
-        var {classes} = this.props;
+        var {classes, charsheet} = this.props;
         return(
             <Grid item xs={this.props.width} >
               <Paper className={classes.inputClass}>
-                <TextField label='Strength' className={classes.inputClass}/>
-
-                <TextField label='Dexterity' className={classes.inputClass}/>
-
-                <TextField label='Constitution' className={classes.inputClass}/>
-
-                <TextField label='Intelligence' className={classes.inputClass}/>
-
-                <TextField label='Wisdom' className={classes.inputClass}/>
-
-                <TextField label='Charisma' className={classes.inputClass}/>
-
+              <SavingThrowComponent label='Strength' columnTitle='str_st' charsheet={charsheet} game={this.props.game}/>
+              <SavingThrowComponent label='Dexterity' columnTitle='dex_st' charsheet={charsheet} game={this.props.game}/>
+              <SavingThrowComponent label='Constitution' columnTitle='con_st' charsheet={charsheet} game={this.props.game}/>
+              <SavingThrowComponent label='Intelligence' columnTitle='int_st' charsheet={charsheet} game={this.props.game}/>
+              <SavingThrowComponent label='Wisdom' columnTitle='wis_st' charsheet={charsheet} game={this.props.game}/>
+              <SavingThrowComponent label='Charisma' columnTitle='cha_st' charsheet={charsheet} game={this.props.game}/>
                 <Typography component='p'>
                     Saving Throws
                 </Typography>

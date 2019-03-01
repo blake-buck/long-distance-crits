@@ -15,23 +15,35 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import AppBar from '@material-ui/core/AppBar';
+import { FormControl } from '@material-ui/core';
+import { auth } from 'firebase';
 
 const styles = theme =>({
+    appbar:{
+        paddingTop:5,
+        paddingBottom:5
+    },
+    cardContent:{
+        backgroundColor:'#3F51B5',
+        color:'white'
+    },
     container:{
         display:'flex',
         width:'100%',
-        justifyContent:'center',
-        alignItems:'center'
+        justifyContent:'space-around',
+        alignItems:'center',
+        marginTop:'3%'
     },
     img:{
         [ theme.breakpoints.down('sm')]:{display:'none'},
         [ theme.breakpoints.up('md')]:
         {
-            width:'60%',
+            width:'40%',
             height:'90vh',
-            margin:0
+            margin:0,
+            minHeight:500
         }
-        
     },
     card:{
         height:350,
@@ -42,6 +54,8 @@ const styles = theme =>({
         display:'flex',
         flexDirection:'column', 
         alignItems:'center',
+        marginLeft:'auto',
+        marginRight:'auto'
     },
     cardActionsChild:{
         marginTop: theme.spacing.unit *3
@@ -65,7 +79,8 @@ class Register extends Component{
         this.setState({[id] : e.target.value});
     }
 
-    submitRegister(){
+    submitRegister(e){
+        e.preventDefault();
         var {username, password, confirmPassword} = this.state;
         //I should eventually come back and make this more specific, or turn register into a form, that way 
         //username is a required field and doesnt have to be checked here
@@ -86,11 +101,17 @@ class Register extends Component{
         var {username, password, confirmPassword, openDialog} = this.state;
         var {classes} = this.props;
         return(
+            <div>
+            <AppBar className={classes.appbar}>
+                <Typography variant='h6' component='h1' color='inherit'>
+                    Long Distance Crits
+                </Typography>
+            </AppBar>
             <div className={classes.container}>
                 <Dialog open={openDialog} onClose={()=>this.closeDialog()}>
                     <DialogContent>
                         <DialogContentText>
-                            Passwords must match before you can register AND/OR Username must be filled out
+                            Passwords must match before you can register
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
@@ -98,20 +119,25 @@ class Register extends Component{
                     </DialogActions>
                 </Dialog>
                 
-                <img src='https://openclipart.org/download/169898/1336369712.svg' alt='Knight' className={classes.img}/>
+                <img src='https://firebasestorage.googleapis.com/v0/b/long-distance-crits.appspot.com/o/displayImages%2Fknight.png?alt=media&token=d0435845-2e55-4c87-8c2e-ffc52d2d80af' alt='Knight' className={classes.img}/>
+                
                 <Card className={classes.card}>
-                    <CardContent>
-                        <Typography variant='h4' component='h2'>
+                    <CardContent className={classes.cardContent}>
+                        <Typography variant='h4' component='h2' color='inherit'>
                             Register
                         </Typography>
                     </CardContent>
 
-                    <CardActions className={classes.cardActions}>
+                    <CardActions >
+                    <form onSubmit={(e)=>this.submitRegister(e)} className={classes.cardActions}>
+                    <FormControl required>
                         <Input
                             placeholder='Username'
                             defaultValue={username}
                             onChange={(e)=>this.handleChange('username', e)}
                         />
+                    </FormControl>
+                    <FormControl required>
                         <Input
                             type='password'
                             placeholder='Password'
@@ -119,6 +145,8 @@ class Register extends Component{
                             className={classes.cardActionsChild}
                             onChange={(e)=>this.handleChange('password', e)}
                         />
+                    </FormControl>
+                    <FormControl required>
                         <Input
                             type='password'
                             placeholder='Confirm Password'
@@ -126,14 +154,17 @@ class Register extends Component{
                             className={classes.cardActionsChild}
                             onChange={(e)=>this.handleChange('confirmPassword', e)}
                         />
-                        <Button variant="contained" className={classes.cardActionsChild} onClick={()=>this.submitRegister()} >
+                    </FormControl>
+                        <Button type='submit' variant="contained" className={classes.cardActionsChild} >
                             Register
                         </Button>
                         <Button component={Link} to='/'>
                             Already a user?
                         </Button>
+                        </form>
                     </CardActions>
                 </Card>
+            </div>
             </div>
         );
     }

@@ -1,0 +1,1 @@
+UPDATE quest SET title=$2, description=$3, objectives=$4 WHERE quest_id=$1;

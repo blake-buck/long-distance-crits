@@ -23,11 +23,11 @@ const styles = theme => ({
         height:15
     },
     fonts:{
-        fontSize:'.7em'
+        fontSize:'1.5em'
     }
 })
 
-class SkillComponent extends Component{
+class SavingThrowComponent extends Component{
 
     constructor(props){
         super(props);
@@ -53,6 +53,7 @@ class SkillComponent extends Component{
         return(
             <Grid item>
                 <Paper className={classes.itemPaper}>
+                    
                     <FormControlLabel
                         classes={{
                             label:classes.fonts
@@ -70,8 +71,8 @@ class SkillComponent extends Component{
 
 const mapStateToProps = state =>state;
 
-SkillComponent.propTypes ={
+SavingThrowComponent.propTypes ={
     classes:PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(connect(mapStateToProps, {updateCharSheet})(SkillComponent));
+export default withStyles(styles)(connect(mapStateToProps, {updateCharSheet})(SavingThrowComponent));

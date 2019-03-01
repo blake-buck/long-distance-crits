@@ -1,0 +1,1 @@
+INSERT INTO quest(questlog_id, title, description, objectives) VALUES($1, $2, $3, $4) RETURNING *;

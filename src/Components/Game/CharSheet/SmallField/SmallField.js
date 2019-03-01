@@ -54,14 +54,16 @@ class SmallField extends Component{
         if(this.props.charsheet[columnTitle]){
             value = this.props.charsheet[columnTitle];
         }
+        else if(this.props.charsheet[0][columnTitle] && this.props.charsheet[columnTitle] !== ''){
+            value= this.props.charsheet[0][columnTitle]
+        }
         else {
-            value = defaultValue
+            value = ''
         }
 
         return(
             <Grid item xs={this.props.desktopWidth} >
               <Paper>
-              <button onClick={()=>console.log(this.props.charsheet)}>alkdfsj;</button>
                 <Input className={classes.inputClass} value={value} type={this.props.type} onChange={(e)=>this.handleChange('defaultValue', e)}/>
 
                 <Typography component='p'>

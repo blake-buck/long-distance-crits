@@ -10,7 +10,7 @@ class ExitGameButton extends Component{
     render(){
         return(
             <div>
-                <Button color='secondary' variant='contained' component={Link} to='/creategame'>Exit Game</Button>
+                <Button fullWidth color='secondary' variant='contained' onClick={()=>this.props.socket.disconnect()} component={Link} to='/creategame'>Exit Game</Button>
             </div>
         )
     }

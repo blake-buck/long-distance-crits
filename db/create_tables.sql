@@ -85,3 +85,11 @@ CREATE TABLE charsheet(
   languages_proficiencies TEXT
   
 );
+
+CREATE TABLE quest(
+  quest_id SERIAL PRIMARY KEY,
+  questlog_id INT REFERENCES questlog(questlog_id),
+  title TEXT,
+  description TEXT,
+  objectives TEXT
+)

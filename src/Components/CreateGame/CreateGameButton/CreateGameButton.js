@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import firebase from '../../../firebase.js';
+
 
 //Material UI imports
 import PropTypes from 'prop-types';
@@ -17,16 +19,24 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
+import ButtonBase from '@material-ui/core/ButtonBase';
+
 
 const styles = theme => ({
     card:{
         display:'flex',
         flexDirection:'column',
         alignItems:'center',
-        justifyContent:'center'
+        justifyContent:'center',
+        paddingLeft:60,
+        paddingRight:60,
+        paddingBottom:25
     }
 })
 
+//<Button color='primary' variant='contained' onClick={()=>{this.openCreateGameDialog()}}>
+                       // <AddIcon />
+                  //  </Button>
 
 //CreateGame creates a new game and adds it to the database
 class CreateGameButton extends Component{
@@ -37,15 +47,20 @@ class CreateGameButton extends Component{
             createGameOpen:false,
             createGameTitle:"New Game",
             createGamePassword:"",
+            width:'',
+            height:''
         }
     }
 
     createGame(){
-        var {createGameTitle, createGamePassword} = this.state;
-        axios.post('/api/game', {createGameTitle, createGamePassword}).then((results) => {
+        var {createGameTitle, createGamePassword, width, height} = this.state;
+            
+        axios.post('/api/game', {createGameTitle, createGamePassword, width, height}).then((results2) => {     
             this.props.componentDidMount();
             this.setState({createGameTitle:"New Game", createGamePassword:""})
         })
+        
+        
     }    
 
     handleChange(id, e){
@@ -59,7 +74,7 @@ class CreateGameButton extends Component{
 
     render(){
         const {classes} = this.props;
-        const {createGameOpen, createGameTitle, createGamePassword} = this.state;
+        const {createGameOpen, createGameTitle, createGamePassword, width, height} = this.state;
         return(
             <div>
             <Dialog open={createGameOpen}>
@@ -68,29 +83,32 @@ class CreateGameButton extends Component{
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Add a Title and Password to your game. Password can't be changed after creation so make sure you can remember it!   
+                        Add a Title and Password to your game, set the height and width of your canvas. Password can't be changed after creation so make sure you can remember it!   
                      </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                         <Input placeholder={'Title'} defaultValue={createGameTitle} onChange={(e)=>this.handleChange('createGameTitle', e)}/>
                         <Input placeholder={'Password'} defaultValue={createGamePassword} onChange={(e)=>this.handleChange('createGamePassword', e)}/>
+                        <Input placeholder={'Width'} defaultValue={width} onChange={(e)=>this.handleChange('width', e)} />
+                        <Input placeholder={'Height'} defaultValue={height} onChange={(e)=>this.handleChange('height', e)} />
                         <Button onClick={()=>{this.openCreateGameDialog()}}>Cancel</Button>
                         <Button onClick={()=>{this.createGame(); this.openCreateGameDialog();}}>Submit</Button>
                 </DialogActions>
             </Dialog>
 
-            <Card className={classes.card}>
-                <CardActions>
-                    <Button color='primary' variant='contained' onClick={()=>{this.openCreateGameDialog()}}>
-                        <AddIcon />
-                    </Button>
-                </CardActions>
-                <CardContent>
+            <ButtonBase  onClick={()=>{this.openCreateGameDialog()}}>
+            <Card>
+                <CardActions className={classes.card}>   
+                    <Typography component='h1' variant='h1'>
+                        +
+                    </Typography>     
                     <Typography component='p'>
                         Create Game
                     </Typography>
-                </CardContent>
+                </CardActions>
             </Card>
+            </ButtonBase>
+
             </div>
         );
     }

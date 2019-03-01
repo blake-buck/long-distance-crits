@@ -1,0 +1,1 @@
+SELECT canvas_width, canvas_height FROM game WHERE game_id=$1;

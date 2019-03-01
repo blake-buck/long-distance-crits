@@ -32,26 +32,29 @@ class BigField extends Component{
     handleChange(e){
        var {game, columnTitle, charsheet} = this.props;
        var input = e.target.value;
+
        this.props.updateCharSheet(game, columnTitle, input, charsheet);
-       console.log('firing handleChange');
+       console.log('firing handleChange', input, charsheet[columnTitle], charsheet[0][columnTitle]);
        this.setState({})
     }
 
     render(){
         var {classes, charsheet, columnTitle, defaultValue} = this.props;
         var value='';
-
+        
         if(this.props.charsheet[columnTitle]){
             value = this.props.charsheet[columnTitle];
         }
+        else if(this.props.charsheet[0][columnTitle] && this.props.charsheet[columnTitle] !== ''){
+            value= this.props.charsheet[0][columnTitle]
+        }
         else {
-            value = defaultValue
+            value = ''
         }
 
         return(
             <Grid item xs={this.props.desktopWidth} >
               <Paper>
-                  <button onClick={()=>console.log(columnTitle)}>alkdfsj;</button>
                 <Input multiline fullWidth rows={this.props.rows} className={classes.overflow} value={value} onChange={(e)=>this.handleChange(e)}/>
 
                 <Typography component='p'>

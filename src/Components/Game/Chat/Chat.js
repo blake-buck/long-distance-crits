@@ -9,12 +9,19 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 const styles = theme =>({
     paper:{
-        height:'100%',
-        maxHeight:500,
-        paddingBottom:30
+        [ theme.breakpoints.down('sm')]:{
+            height:'40%',
+            maxHeight:'40vh'
+        },
+        [ theme.breakpoints.up('md')]:
+        {
+            height:'96vh',
+            maxHeight:'96vh'
+        },
        // overflow:'auto'
     },
     messageBox:{
@@ -113,10 +120,10 @@ class Chat extends Component{
 
                 
                     <form onSubmit={(e)=>this.emitMessage(e)}>
-                    <Input fullWidth placeholder='Type Message here' onChange={(e)=>this.handleChange(e)} value={this.state.inputContent}/>
+                    <TextField variant='outlined' fullWidth placeholder='Type Message here' onChange={(e)=>this.handleChange(e)} value={this.state.inputContent}/>
                     </form>
 
-                    <ExitGameButton />
+                    <ExitGameButton socket={this.state.socket}/>
                 
             </Paper>
         );

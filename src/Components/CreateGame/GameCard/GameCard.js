@@ -55,12 +55,12 @@ class GameCard extends Component{
         return(
             <Card>
                 <CardContent className={classes.cardContent}>
-                    <Typography component='p'>
-                        Title: {this.state.gameTitle}
+                    <Typography component='h6' variant='h6'>
+                        {this.state.gameTitle}
                     </Typography>
 
                     <Typography component='p'>
-                        Type: {this.state.gameType}
+                        Game: {this.state.gameType}
                     </Typography>
 
                     <Typography component='p'>
@@ -72,9 +72,6 @@ class GameCard extends Component{
                     </Button>
                     <Button onClick={()=>this.deleteGame()} color='secondary'>Leave Game</Button>
                 </CardContent>
-                <CardActions>
-                    <TextField defaultValue={this.props.title} variant='outlined'/>
-                </CardActions>
             </Card>
         );
     }

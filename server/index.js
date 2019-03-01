@@ -49,7 +49,9 @@ io.set('origins', '*:*');
 io.on('connection', (socket) => {
 	console.log('A USER CONNECTED');
 	var roomID='';
-	var lines = [];
+	var lines  = [];
+	var widths = [];
+	var colors = [];
 
 	socket.on('room', (room)=>{
 		roomID=room;
@@ -68,8 +70,43 @@ io.on('connection', (socket) => {
 	
 
 	socket.on('draw', (newLines) => {
-		lines.push(newLines);
+		lines.push(newLines[0]);
+		widths.push(newLines[1]);
+		colors.push(newLines[2]);
+
 		io.in(roomID).emit('draw', newLines);
+	})
+
+	socket.on('playersCanDraw', (playersCanDraw) => {
+		io.in(roomID).emit('playersCanDraw', playersCanDraw);
+	})
+
+	socket.on('toggleDisplayGrid', (displayGrid) => {
+		io.in(roomID).emit('toggleDisplayGrid', displayGrid);
+	})
+
+	socket.on('playersCanMove', (playersCanMove) => {
+		io.in(roomID).emit('playersCanMove', playersCanMove);
+	})
+
+	socket.on('token drag', (position) => {
+		io.in(roomID).emit('token drag', position);
+	})
+
+	socket.on('token transform', (transform) => {
+		io.in(roomID).emit('token transform', transform);
+	})
+
+	socket.on('activeTokens', (activeTokens) => {
+		io.in(roomID).emit('activeTokens', activeTokens);
+	})
+
+	socket.on('questLog', (questLog) => {
+		io.in(roomID).emit('questLog', questLog);
+	})
+
+	socket.on('backgroundImage', (backgroundImage) => {
+		io.in(roomID).emit('backgroundImage', backgroundImage);
 	})
 
 	socket.on("disconnect", () => {
@@ -85,11 +122,59 @@ app.post('/auth/login', login);
 
 
 
+app.get('/api/gamescount', (req, res) => {
+	const db = req.app.get('db');
+
+	db.get_game_count().then(results => {
+		console.log('gamescount', results);
+		res.json(results);
+	})
+})
 app.get('/api/games', findGamesForUser);
 app.get('/api/users/:game', getUsersInGame);
 app.get('/api/user/:game/charsheet', getCharsheet);
 
+app.get('/api/game/:game/questlog', (req, res) => {
+	const db = req.app.get('db');
+	
+	db.get_questlog(req.params.game).then(results => {
+		console.log('results:', results)
+		res.json(results);
+	})
+})
+
 app.get('/api/game/:game', getGameCardInfo);
+
+app.get('/api/game/:game/canvas', (req, res) => {
+	const db = req.app.get('db');
+	db.get_game_canvas_dimensions(req.params.game).then(results => {
+		res.json(results);
+	})
+})
+
+app.post('/api/game/:game/quest', (req, res) => {
+	const db = req.app.get('db');
+	db.get_questlog_id(req.params.game).then(results => {
+		console.log(results[0].questlog_id);
+		db.create_quest(results[0].questlog_id, req.body.title, req.body.description, req.body.objectives).then(results2 =>{
+			res.json(results2);
+		}).catch(err => console.log('error at create_quest', err))
+	}).catch( err => console.log('error at get_questlog_id', err))
+	
+})
+app.post('/api/game/:game/quest/delete', (req, res) => {
+	const db = req.app.get('db');
+	db.delete_quest(req.body.quest_id).then(results => {
+		res.json('deleted quest');
+	})
+})
+app.put('/api/game/:game/quest', (req, res) => {
+	const db = req.app.get('db');
+	db.update_quest(req.body.quest_id, req.body.title, req.body.description, req.body.objectives).then(results => {
+		res.json('updated quest');
+	})
+})
+
 
 app.post('/api/game', createGame);
 app.post('/api/useringame', joinGame);
@@ -97,6 +182,7 @@ app.post('/api/useringame', joinGame);
 app.put('/api/user/:game/charsheet', updateCharsheet);
 
 app.delete('/api/:game', deleteGame);
+
 
 
 

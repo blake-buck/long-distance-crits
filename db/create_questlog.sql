@@ -1,0 +1,1 @@
+INSERT INTO questlog(game) VALUES ($1);

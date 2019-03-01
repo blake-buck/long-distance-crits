@@ -1,0 +1,1 @@
+DELETE FROM quest WHERE quest_id=$1;
