@@ -64,6 +64,8 @@ const TOGGLE_PLAYERSCANDRAW = 'TOGGLE_PLAYERSCANDRAW';
 const TOGGLE_PLAYERSCANMOVE = 'TOGGLE_PLAYERSCANMOVE';
 const TOGGLE_DISPLAYGRID = 'TOGGLE_DISPLAYGRID';
 
+const RESET_REDUCER = 'RESET_REDUCER';
+
 export function getCharSheet(gameID){
     return{
         type:GET_CHARSHEET,
@@ -81,7 +83,6 @@ export function getQuestLog(gameID){
 export function updateCharSheet(gameID, columnTitle, value, charsheet){
     axios.put(`/api/user/${gameID}/charsheet`, {columnTitle, value});
     charsheet[columnTitle]=value;
-    console.log('updateCharSheet', value, charsheet[columnTitle])
     return{
         type:UPDATE_CHARSHEET,
         payload:charsheet
@@ -263,7 +264,12 @@ export function toggleDisplayGrid(displayGrid){
     }
 }
 
-
+export function resetReducer(){
+    return{
+        type:RESET_REDUCER,
+        payload:initialState
+    }
+}
 
 export default function reducer(state = initialState, action){
     switch(action.type){
@@ -425,7 +431,6 @@ export default function reducer(state = initialState, action){
 
         //For whatever reason I have to click Clear Canvas 2 times in order for lines to be updated
         case CLEAR_CANVAS:
-        console.log('CLEARING CANVAS')
         return{
             ...state, 
             lines:[],
@@ -439,8 +444,27 @@ export default function reducer(state = initialState, action){
             grid:action.payload
         }
 
+        case RESET_REDUCER:
+        return {
+            ...state,
+            lines:[],
+            strokeWidths:[],
+            strokeColors:[],
+            tokens:[],
+    activeTokens:[],
+    tokenXPos:[],
+    tokenYPos:[],
+    selectedToken:-1,
+    scaleX:[],
+    scaleY:[],
+    rotation:[],
+
+    questLog:[],
+    backgroundImage:'',
+    backgroundImages:[]
+        }
+
         default :
-            console.log('reducer default');
             return state;
     }
 }

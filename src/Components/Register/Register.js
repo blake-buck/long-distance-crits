@@ -17,7 +17,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import AppBar from '@material-ui/core/AppBar';
 import { FormControl } from '@material-ui/core';
-import { auth } from 'firebase';
 
 const styles = theme =>({
     appbar:{

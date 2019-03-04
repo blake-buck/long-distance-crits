@@ -1,18 +1,14 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import firebase from '../../../firebase.js';
-
 
 //Material UI imports
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input'
-import AddIcon from '@material-ui/icons/Add';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -31,6 +27,15 @@ const styles = theme => ({
         paddingLeft:60,
         paddingRight:60,
         paddingBottom:25
+    },
+    cardActions:{
+        display:'flex',
+        [theme.breakpoints.down('sm')]:{
+            flexDirection:'column'
+        },
+        [theme.breakpoints.up('md')]:{
+            flexDirection:'row'
+        }
     }
 })
 
@@ -86,13 +91,13 @@ class CreateGameButton extends Component{
                         Add a Title and Password to your game, set the height and width of your canvas. Password can't be changed after creation so make sure you can remember it!   
                      </DialogContentText>
                 </DialogContent>
-                <DialogActions>
-                        <Input placeholder={'Title'} defaultValue={createGameTitle} onChange={(e)=>this.handleChange('createGameTitle', e)}/>
-                        <Input placeholder={'Password'} defaultValue={createGamePassword} onChange={(e)=>this.handleChange('createGamePassword', e)}/>
-                        <Input placeholder={'Width'} defaultValue={width} onChange={(e)=>this.handleChange('width', e)} />
-                        <Input placeholder={'Height'} defaultValue={height} onChange={(e)=>this.handleChange('height', e)} />
-                        <Button onClick={()=>{this.openCreateGameDialog()}}>Cancel</Button>
+                <DialogActions className={classes.cardActions}>
+                        <Input fullWidth placeholder={'Title'} defaultValue={createGameTitle} onChange={(e)=>this.handleChange('createGameTitle', e)}/>
+                        <Input fullWidth placeholder={'Password'} defaultValue={createGamePassword} onChange={(e)=>this.handleChange('createGamePassword', e)}/>
+                        <Input fullWidth placeholder={'Width'} defaultValue={width} onChange={(e)=>this.handleChange('width', e)} />
+                        <Input fullWidth placeholder={'Height'} defaultValue={height} onChange={(e)=>this.handleChange('height', e)} />
                         <Button onClick={()=>{this.createGame(); this.openCreateGameDialog();}}>Submit</Button>
+                        <Button onClick={()=>{this.openCreateGameDialog()}} color='secondary'>Cancel</Button>
                 </DialogActions>
             </Dialog>
 

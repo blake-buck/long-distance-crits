@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import FeaturesTraits from './FeaturesTraits/FeaturesTraits.js';
 import BigField from './BigField/BigField.js';
 import SmallField from './SmallField/SmallField.js';
 import SavingThrows from './SavingThrows/SavingThrows.js';
@@ -13,12 +12,7 @@ import {getCharSheet} from '../../../ducks/reducer';
 //materialUI imports
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Typography from'@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Card from '@material-ui/core/Card';
-import Input from '@material-ui/core/Input';
 import Grid from '@material-ui/core/Grid';
-import axios from 'axios';
 
 const styles = theme => ({
     root:{
@@ -86,9 +80,11 @@ class CharSheet extends Component{
             <div className={classes.root}>
                 <Grid container spacing={16}>
 
-                    <SmallField label='Character Name' desktopWidth={3} defaultValue={charsheet.character_name} type='text' game={this.props.gameID} columnTitle='character_name' charsheet={charsheet} />
-
-                    <Grid item xs={9}>
+                    <Grid item xs={12} md={3}>
+                    <SmallField label='Character Name' desktopWidth={12} defaultValue={charsheet.character_name} type='text' game={this.props.gameID} columnTitle='character_name' charsheet={charsheet} />
+                    </Grid>
+                    
+                    <Grid item xs={12} md={9}>
                         <TopRightBar game={this.props.gameID} charsheet={charsheet} />
                     </Grid>
 

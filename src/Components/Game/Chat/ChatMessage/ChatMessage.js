@@ -35,7 +35,7 @@ class ChatMessage extends Component{
 
     render(){
         var {classes} = this.props;
-        var {message, username} = this.state;
+        var {message} = this.state;
         return(
             <Paper className={classes.paper}>
                 <Avatar>{message.charAt(0)}</Avatar>

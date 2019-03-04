@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from'@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import Input from '@material-ui/core/Input';
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
 import Unchecked from '@material-ui/icons/RadioButtonUnchecked';
@@ -15,7 +14,14 @@ import Checked from '@material-ui/icons/RadioButtonChecked';
 
 const styles = theme => ({
     button:{
-        width:'1.6vw'
+        [theme.breakpoints.down('sm')]:{
+            width:'2vw'
+        },
+        [theme.breakpoints.up('md')]:{
+            width:'1.5vw'
+        },
+
+        
     }
 })
 
@@ -32,13 +38,11 @@ class DeathSaves extends Component{
 
     componentDidMount(){
         var {saveChecks, failChecks, saves, fails} = this.state;
-        //console.log(this.props.charsheet);
-        console.log("SAVES", saves);
         for(var i=0; i<saves; i++){
             saveChecks[i]=true;
         }
-        for(var i=0; i<fails; i++){
-            failChecks[i]=true;
+        for(var j=0; j<fails; j++){
+            failChecks[j]=true;
         }
         this.props.updateSaveChecks(saveChecks);
         this.props.updateFailChecks(failChecks);

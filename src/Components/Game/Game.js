@@ -3,7 +3,6 @@ import axios from 'axios';
 import io from 'socket.io-client';
 
 import Canvas from './Canvas/Canvas.js';
-import SetReminder from './SetReminder/SetReminder.js';
 import CharSheet from './CharSheet/CharSheet.js';
 import Chat from './Chat/Chat.js';
 import QuestLog from './QuestLog/QuestLog.js';
@@ -11,16 +10,14 @@ import LoadingScreen from '../LoadingScreen/LoadingScreen.js';
 import firebase from '../../firebase.js';
 
 import {connect} from 'react-redux';
-import {getCharSheet, getQuestLog, updateQuestLog, updateLines, togglePlayersCanDraw, togglePlayersCanMove, toggleDisplayGrid, clearCanvas, updateStrokeWidths, updateStrokeColors, updateTokens, updateActiveTokens, updateScaleX, updateScaleY, updateRotation, updateTokenXPos, updateTokenYPos, updateBackgroundImages, updateBackgroundImage} from '../../ducks/reducer';
+import {getCharSheet, getQuestLog, updateQuestLog, updateLines, togglePlayersCanDraw, togglePlayersCanMove, toggleDisplayGrid, clearCanvas, updateStrokeWidths, updateStrokeColors, updateTokens, updateActiveTokens, updateScaleX, updateScaleY, updateRotation, updateTokenXPos, updateTokenYPos, updateBackgroundImages, updateBackgroundImage, resetReducer} from '../../ducks/reducer';
 
 
 //MaterialUI imports
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
 const styles = theme =>({
@@ -50,7 +47,6 @@ class Game extends Component{
     componentDidMount(){
         var room=this.props.match.params.id;
         var {socket} = this.state;    
-        console.log(this.props.match.params.id, 'IDIDFIDIDIDIDIDIDIDIDIDIDID');
         
 
         
@@ -70,13 +66,11 @@ class Game extends Component{
                                 }).catch(err => console.log(err));
 
                                 firebase.database().ref(`/backgroundImages/${results.data.username}`).once('value').then((snapshot)=>{    
-                                    console.log(snapshot.val());
                                     this.props.updateBackgroundImages(snapshot.val().backgroundImages);
                                 }).catch(err => console.log(err));
 
                                 axios.get(`/api/game/${room}/questlog`).then(results4 => {
                                     axios.get(`/api/game/${room}/canvas`).then(results5 => {
-                                        console.log('I AM THE CANVAS HEIGHT AND WIDTH', results5.data);
                                         this.props.updateQuestLog(results4.data);
                                         this.setState({isAuthorized:true, isGM:true, username:results.data.username, charsheet:results3.value.data[0], questLog:results4.data, width:results5.data[0].canvas_width, height:results5.data[0].canvas_height})
                                     })
@@ -89,7 +83,6 @@ class Game extends Component{
                             this.props.getCharSheet(room).then(results3 => {
                                 axios.get(`/api/game/${room}/questlog`).then(results4 => {
                                     axios.get(`/api/game/${room}/canvas`).then(results5 => {
-                                        console.log('I AM THE CANVAS HEIGHT AND WIDTH', results5.data);
                                         this.props.updateQuestLog(results4.data);
                                         this.setState({isAuthorized:true, isGM:false, username:results.data.username, charsheet:results3.value.data[0], questLog:results4.data, width:results5.data[0].canvas_width, height:results5.data[0].canvas_height})
                                     })
@@ -107,25 +100,43 @@ class Game extends Component{
             else{
                 this.props.history.push('/');
             }
+            
         })
 
-        firebase.database().ref(`/canvases/${this.props.match.params.id}`).once('value').then((snapshot)=>{
-            console.log(snapshot.val());
+        firebase.database().ref(`/canvases/${this.props.match.params.id}`).once('value').then((snapshot)=>{;
             if(snapshot.val().lines)            this.props.updateLines(snapshot.val().lines);
+            else this.props.updateLines([])
+
             if(snapshot.val().strokeWidths)     this.props.updateStrokeWidths(snapshot.val().strokeWidths);
+            else this.props.updateStrokeWidths([]);
+
             if(snapshot.val().strokeColors)     this.props.updateStrokeColors(snapshot.val().strokeColors);
+            else this.props.updateStrokeColors([]);
+
             if(snapshot.val().activeTokens)     this.props.updateActiveTokens(snapshot.val().activeTokens);
+            else this.props.updateActiveTokens([]);
+
             if(snapshot.val().scaleX)           this.props.updateScaleX(snapshot.val().scaleX);
+            else this.props.updateScaleX([]);
+
             if(snapshot.val().scaleY)           this.props.updateScaleY(snapshot.val().scaleY);
+            else this.props.updateScaleY([]);
+
             if(snapshot.val().rotation)         this.props.updateRotation(snapshot.val().rotation);
+            else this.props.updateRotation([]);
+
             if(snapshot.val().tokenXPos)        this.props.updateTokenXPos(snapshot.val().tokenXPos);
+            else this.props.updateTokenXPos([]);
+
             if(snapshot.val().tokenYPos)        this.props.updateTokenYPos(snapshot.val().tokenYPos);
+            else this.props.updateTokenYPos([]);
+
             if(snapshot.val().backgroundImage)  this.props.updateBackgroundImage(snapshot.val().backgroundImage);
+            
             
         }).catch(err => console.log(err));
 
         socket.on('connect', ()=>{
-            console.log('Can i get a connection?');
             socket.emit('room', this.props.match.params.id)
         })
         socket.on('playersCanDraw', (playersCanDraw)=>{
@@ -141,7 +152,6 @@ class Game extends Component{
         })
 
         socket.on('activeTokens', (activeTokens) => {
-            console.log('RECIEVED ACTIVE TOKENS', activeTokens)
             this.props.updateActiveTokens(activeTokens);
         })
 
@@ -165,7 +175,6 @@ class Game extends Component{
     componentWillUnmount(){
         var {socket} = this.state;
         socket.disconnect();
-        
     }
 
     render(){
@@ -228,4 +237,4 @@ const mapStateToProps =(state) => {
     }
 };
 //
-export default withStyles(styles)(connect(mapStateToProps, {getCharSheet, getQuestLog, updateQuestLog, updateLines, togglePlayersCanDraw, togglePlayersCanMove, toggleDisplayGrid, clearCanvas, updateStrokeWidths, updateStrokeColors, updateTokens, updateActiveTokens, updateScaleX, updateScaleY, updateRotation, updateTokenXPos, updateTokenYPos, updateBackgroundImages, updateBackgroundImage})(Game));
+export default withStyles(styles)(connect(mapStateToProps, {getCharSheet, getQuestLog, updateQuestLog, updateLines, togglePlayersCanDraw, togglePlayersCanMove, toggleDisplayGrid, clearCanvas, updateStrokeWidths, updateStrokeColors, updateTokens, updateActiveTokens, updateScaleX, updateScaleY, updateRotation, updateTokenXPos, updateTokenYPos, updateBackgroundImages, updateBackgroundImage, resetReducer})(Game));

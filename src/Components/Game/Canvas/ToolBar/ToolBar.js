@@ -21,10 +21,7 @@ const styles = theme => ({
 })
 
 class ToolBar extends Component{
-    constructor(props){
-        super(props);
-        
-    }
+
     render(){
         var {gmToolsIsOpen, classes, isGM} = this.props;
         return(

@@ -6,13 +6,6 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import Unchecked from '@material-ui/icons/RadioButtonUnchecked';
-import Checked from '@material-ui/icons/RadioButtonChecked';
-import Input from '@material-ui/core/Input';
-import FormControlLabel from'@material-ui/core/FormControlLabel';
-import Typography from '@material-ui/core/Typography';
-
 
 const styles = theme => ({
     
@@ -20,7 +13,7 @@ const styles = theme => ({
 
 class Skills extends Component{
     render(){
-        const {classes, charsheet} = this.props;
+        const {charsheet} = this.props;
         return(
             <Paper>
                 <Grid container>

@@ -53,7 +53,6 @@ class QuestLog extends Component{
                 quest_id:questLog[0].quest_id
             })
         } 
-        console.log('POSSIBLE VIEWPORT HEIGHT: ', Math.max( window.innerHeight || 0))
     }
     
     componentDidUpdate(prevProps){
@@ -116,17 +115,15 @@ class QuestLog extends Component{
 
 
     render(){
-        console.log("QUESTLOG:", questLog);
         var {classes} = this.props;
-        var {selectedQuest, questLog} = this.state;
+        var {questLog} = this.state;
 
         return(
             <Grid container spacing={16}>
 
-                <Grid item xs={4}>
+                <Grid item xs={12} md={4}>
                 <Paper>
                     {questLog.map((val, i) => {
-                        console.log(val);
                         return(
                             <Paper key={i}>
                                 <ButtonBase onClick={()=>this.selectQuest(i)}>
@@ -144,7 +141,7 @@ class QuestLog extends Component{
                 </Paper>
                 </Grid>
                 
-                <Grid item xs={8}>
+                <Grid item xs={12} md={8}>
                 {this.props.isGM ? 
                 (<Paper className={classes.questPaper}>
                     {this.state.questLog[0] ? <div>

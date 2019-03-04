@@ -5,10 +5,8 @@ import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 import axios from 'axios';
 
@@ -32,7 +30,6 @@ class GameCard extends Component{
     //This makes it so that the information displayed on a game card is dynamic by getting information such as gameTitle, type, and player number from the  database
     componentDidMount(){
         axios.get(`/api/game/${this.props.game_id}`).then(results => {
-            console.log(results)
             this.setState({
                 gameTitle:results.data.gameInfo[0].title,
                 gameType:results.data.gameInfo[0].game_type,

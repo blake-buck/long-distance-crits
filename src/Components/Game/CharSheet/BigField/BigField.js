@@ -9,8 +9,6 @@ import Typography from'@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Input from '@material-ui/core/Input';
 import Grid from '@material-ui/core/Grid';
-import axios from 'axios';
-
 
 const styles = theme => ({
     overflow:{
@@ -19,9 +17,7 @@ const styles = theme => ({
 })
 
 class BigField extends Component{
-    constructor(props){
-        super(props);
-    }
+    
 
     componentDidUpdate(prevProps){
         if(prevProps !== this.props){
@@ -34,19 +30,18 @@ class BigField extends Component{
        var input = e.target.value;
 
        this.props.updateCharSheet(game, columnTitle, input, charsheet);
-       console.log('firing handleChange', input, charsheet[columnTitle], charsheet[0][columnTitle]);
        this.setState({})
     }
 
     render(){
-        var {classes, charsheet, columnTitle, defaultValue} = this.props;
+        var {classes, charsheet, columnTitle} = this.props;
         var value='';
         
-        if(this.props.charsheet[columnTitle]){
-            value = this.props.charsheet[columnTitle];
+        if(charsheet[columnTitle]){
+            value = charsheet[columnTitle];
         }
-        else if(this.props.charsheet[0][columnTitle] && this.props.charsheet[columnTitle] !== ''){
-            value= this.props.charsheet[0][columnTitle]
+        else if(charsheet[0][columnTitle] && charsheet[columnTitle] !== ''){
+            value= charsheet[0][columnTitle]
         }
         else {
             value = ''

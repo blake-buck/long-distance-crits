@@ -6,6 +6,12 @@
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+//Taking out ability for folks to register for the time being, that way I can control what goes in and out of my 
+//databases
+//<Button component={Link} to='/register'>
+//    Not a user?
+//</Button>
+
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
@@ -16,17 +22,13 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 import FormControl from '@material-ui/core/FormControl';
 import AppBar  from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Icon from '@material-ui/core/Icon';
-import Grid from '@material-ui/core/Grid';
 
 //styles are declared here
 const styles = theme =>({
@@ -107,30 +109,24 @@ class Login extends Component{
             username:"",
             password:"",
             inputContent:"",
-            displayD20URL:'',
-            knightURL:''
+            displayD20URL:'https://firebasestorage.googleapis.com/v0/b/long-distance-crits.appspot.com/o/displayImages%2Fdisplayd20.png?alt=media&token=e18372ed-b6d2-4669-af48-24574a8ffcdd',
+            knightURL:'https://firebasestorage.googleapis.com/v0/b/long-distance-crits.appspot.com/o/displayImages%2Fknight.png?alt=media&token=d0435845-2e55-4c87-8c2e-ffc52d2d80af'
         }
         this.handleChange = this.handleChange.bind(this);
-    }
-
-    componentDidMount(){
-        firebase.storage().ref(`displayImages/displayd20.png`).getDownloadURL().then((url) =>{
-            this.setState({displayD20URL:url})
-        })
-        firebase.storage().ref(`displayImages/knight.png`).getDownloadURL().then((url) =>{
-            this.setState({knightURL:url})
-        })
     }
 
     handleChange(id, e){
         this.setState({[id] : e.target.value});
     }
+    
 
     submitLogin(e){
         e.preventDefault();
         var {username, password} = this.state;
         axios.post('/auth/login', {username, password}).then((results)=>{
             //if the user enters in the correct information they are pushed to the create game component
+            firebase.auth().signInAnonymously().then(results => {
+            }).catch(err=>alert(err));
             this.props.history.push(`/creategame`);
         })
     }
@@ -174,6 +170,7 @@ class Login extends Component{
                             </FormControl>
                             <FormControl required>
                             <Input
+                                type='password'
                                 placeholder='Password'
                                 defaultValue={password}
                                 className={classes.cardActionsChild}
@@ -187,9 +184,8 @@ class Login extends Component{
                          >
                             Login
                         </Button>
-                        <Button component={Link} to='/register'>
-                            Not a user?
-                        </Button>
+                        
+                        
                         </form>
                     </CardActions>
                     

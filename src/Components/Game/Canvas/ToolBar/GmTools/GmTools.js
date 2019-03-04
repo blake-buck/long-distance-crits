@@ -18,7 +18,6 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 
 const styles = theme => ({
     checkBoxes:{
@@ -43,6 +42,14 @@ const styles = theme => ({
         textAlign: 'right',
         top: 0,
 
+    },
+    closeDrawerButton:{
+        [ theme.breakpoints.down('sm')]:{
+            display:'block',
+        },
+        [ theme.breakpoints.up('md')]:{
+        display:'none'
+        }
     }
 })
 
@@ -128,7 +135,7 @@ class GmTools extends Component{
     }
 
     toggleDisplayGrid(){
-        var {toggleDisplayGrid, socket, displayGrid} = this.props;
+        var {socket, displayGrid} = this.props;
         
         socket.emit('toggleDisplayGrid', displayGrid);
     }
@@ -170,9 +177,7 @@ class GmTools extends Component{
 
     downloadImage(imageName){
         var {activeTokens, tokenXPos, tokenYPos, scaleX, scaleY, rotation, lines, strokeWidths, strokeColors, socket, backgroundImage} = this.props;
-        console.log('ROTATION DOWNLOADIMAGE', rotation);
         firebase.storage().ref(`tokens/${this.props.username}/${imageName}`).getDownloadURL().then((url) =>{
-            console.log('url:', url);
             activeTokens.push(url);
             tokenXPos.push(0);
             tokenYPos.push(0);
@@ -229,7 +234,6 @@ class GmTools extends Component{
     }
 
     render(){
-        console.log('token positions', this.props.tokenXPos, this.props.tokenYPos)
         const {gmToolsIsOpen, playersCanDraw, playersCanMove, displayGrid, tokens, backgroundImages, classes} = this.props;
         var {tokensDialogOpen, backgroundImageDialogOpen} = this.state;
         return(
@@ -271,10 +275,13 @@ class GmTools extends Component{
                     <Button onClick={()=>this.emitClearBackgroundImage()}>Clear Background</Button>
                     <Button  onClick={()=>this.emitClearCanvas()}>Clear Drawings</Button>
                     <Button  onClick={()=>this.emitClearTokens()}>Clear Tokens</Button>
+
                     
                     </div>
                     
                 <SetReminder />
+                <Button className={classes.closeDrawerButton} onClick={()=>this.props.toggleGmToolsIsOpen(false)}>Close Drawer</Button>
+
                 </Paper>
             </Drawer>
 
@@ -329,7 +336,6 @@ const mapStateToProps =(state) => {
 
         gmToolsIsOpen:state.gmToolsIsOpen,
         playersCanDraw:state.playersCanDraw,
-        lines:state.lines,
         colors:state.colors,
         widths:state.widths,
         displayGrid:state.displayGrid,

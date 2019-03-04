@@ -1,11 +1,7 @@
 import React, {Component} from 'react';
-import Konva from 'konva';
-import {Stage, Layer, Text, Circle, Rect, Line, Image, Transformer} from 'react-konva';
-import useImage from 'use-image';
+import {Stage, Layer, Line} from 'react-konva';
 import {connect} from 'react-redux';
 import {updateLines, updateStrokeWidths, updateStrokeColors, toggleGmToolsIsOpen, updateGrid, updateTokenXPos, updateTokenYPos, updateSelectedToken, updateScaleX, updateScaleY, updateRotation, updateBackgroundImage} from '../../../ducks/reducer';
-import io from 'socket.io-client';
-
 import ToolBar from './ToolBar/ToolBar.js';
 import Token from './Token/Token.js';
 import TransformerComponent from './TransformerComponent/TransformerComponent.js';
@@ -18,8 +14,6 @@ import firebase from '../../../firebase.js';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
     stageContainer:{
@@ -74,23 +68,18 @@ class Canvas extends Component{
     componentDidMount(){
 
         var {socket}=this.props;
-        var {gameID, tokenXPos, tokenYPos, scaleX, scaleY, rotation, lines, strokeWidths, strokeColors, activeTokens, backgroundImage} = this.state;
+        var {tokenXPos, tokenYPos, scaleX, scaleY, rotation, lines, strokeWidths, strokeColors, activeTokens, backgroundImage} = this.state;
         
         //This will become dynamic when GMs are allowed to set height and width of canvas, as well as grid size
         var grid=[];
         for(var i=this.props.width; i>=0; i-=70){
             grid.push([i, 0, i, this.props.height]);
         }
-        for(var i=this.props.height; i>=0; i-=70){
-            grid.push([0, i, this.props.width, i]);
+        for(var j=this.props.height; j>=0; j-=70){
+            grid.push([0, j, this.props.width, j]);
         }
         
         this.props.updateGrid(grid);
-
-        // socket.emit('canvas connection');
-        // socket.on('canvas connection', (newLines)=>{
-        //     console.log(newLines)
-        // })
         
         socket.on('draw', (newLines) => {
             this.props.updateLines(newLines[0]);
@@ -120,7 +109,6 @@ class Canvas extends Component{
         })
 
         socket.on('token transform', (transform) => {
-            console.log('TOKEN TRANSFROM:', activeTokens, this.state.activeTokens)
             scaleX[transform[5]]=transform[0];
             scaleY[transform[5]]=transform[1];
             rotation[transform[5]]=transform[2];
@@ -190,7 +178,7 @@ class Canvas extends Component{
 
     beginLine(e){
         if(this.props.selectedTool === 'draw' && (this.props.playersCanDraw||this.props.isGM)){
-            var {isDrawing, currentLine, lines, strokeWidths, strokeColors} = this.state;
+            var {lines, strokeWidths, strokeColors} = this.state;
             //currentLine.push(e.evt.layerX, e.evt.layerY);
             strokeWidths.push(this.props.strokeWidth);
             strokeColors.push(this.props.strokeColor);
@@ -198,9 +186,6 @@ class Canvas extends Component{
             this.props.updateLines(lines);
             this.props.updateStrokeWidths(strokeWidths);
             this.props.updateStrokeColors(strokeColors);
-
-            
-
             this.setState({isDrawing:true, strokeWidths, strokeColors})
         }
     }
@@ -226,7 +211,7 @@ class Canvas extends Component{
     endLine(e){
         if(this.props.selectedTool === 'draw' && (this.props.playersCanDraw||this.props.isGM)){
             
-                var {currentLine, lines, strokeWidths, strokeColors} = this.state;
+                var {lines, strokeWidths, strokeColors} = this.state;
                
                 lines[lines.length-1].push(e.evt.layerX, e.evt.layerY);
                 
@@ -247,7 +232,7 @@ class Canvas extends Component{
 
     render(){
         var {lines, tokenXPos, tokenYPos} = this.state;
-        var {classes, strokeWidths, strokeColors, gmToolsIsOpen, grid, displayGrid, activeTokens, scaleX, scaleY, rotation} = this.props;
+        var {classes, strokeWidths, strokeColors, grid, displayGrid, activeTokens, scaleX, scaleY, rotation} = this.props;
         
         return(
         <Paper className={classes.paper}>

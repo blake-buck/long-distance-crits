@@ -25,8 +25,6 @@ class TinyInputField extends Component{
         var input = e.target.value;
         var checker = input.match(/[1-9]/g);
 
-        console.log(checker);
-
         if(type==='number'){
             if(checker){
                 this.props.updateCharSheet(game, columnTitle, Number(checker.join('')), charsheet);
@@ -39,15 +37,17 @@ class TinyInputField extends Component{
     }
 
     render(){
-        var {classes, charsheet, columnTitle, defaultValue} = this.props;
+        var {classes, columnTitle} = this.props;
         var value ='';
-        //console.log(this.props);
 
         if(this.props.charsheet[columnTitle]){
             value = this.props.charsheet[columnTitle];
         }
+        else if(this.props.charsheet[0][columnTitle] && this.props.charsheet[columnTitle] !== ''){
+            value= this.props.charsheet[0][columnTitle]
+        }
         else {
-            value = defaultValue
+            value = ''
         }
         return(
             <Grid item xs={4}>

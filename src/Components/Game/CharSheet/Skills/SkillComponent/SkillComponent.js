@@ -29,10 +29,6 @@ const styles = theme => ({
 
 class SkillComponent extends Component{
 
-    constructor(props){
-        super(props);
-    }
-
     handleChange(e){
         var {game, columnTitle, charsheet} = this.props;
         this.props.updateCharSheet(game, columnTitle, e.target.value, charsheet);

@@ -1,14 +1,11 @@
 import React, {Component} from 'react';
 import ExitGameButton from './ExitGameButton/ExitGameButton.js';
 import ChatMessage from './ChatMessage/ChatMessage.js';
-import io from 'socket.io-client';
 
 //Material UI imports
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import Input from '@material-ui/core/Input';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 const styles = theme =>({

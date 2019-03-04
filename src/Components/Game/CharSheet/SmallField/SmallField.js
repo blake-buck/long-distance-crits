@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 import {connect} from 'react-redux';
 import {updateCharSheet} from '../../../../ducks/reducer'
 
@@ -20,9 +19,7 @@ const styles = theme => (
 })
 
 class SmallField extends Component{
-    constructor(props){
-        super(props);
-    }
+
     componentDidUpdate(prevProps){
         if(prevProps !== this.props){
 
@@ -33,8 +30,6 @@ class SmallField extends Component{
         var {game, columnTitle, type, charsheet}= this.props;
         var input = e.target.value;
         var checker = input.match(/[1-9]/g);
-
-        console.log(checker);
 
         if(type==='number'){
             if(checker){
@@ -48,7 +43,7 @@ class SmallField extends Component{
     }
 
     render(){
-        var {classes, charsheet, columnTitle, defaultValue} = this.props;
+        var {classes, columnTitle} = this.props;
         var value='';
 
         if(this.props.charsheet[columnTitle]){

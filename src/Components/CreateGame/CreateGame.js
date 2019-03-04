@@ -3,8 +3,9 @@ import axios from 'axios';
 import CreateGameButton from './CreateGameButton/CreateGameButton.js';
 import GameCard from './GameCard/GameCard.js';
 import JoinGame from './JoinGame/JoinGame.js';
-import {Redirect, Link} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import LoadingScreen from '../LoadingScreen/LoadingScreen.js';
+import firebase from '../../firebase.js';
 
 //Material UI imports
 import PropTypes from 'prop-types';
@@ -64,7 +65,6 @@ class CreateGame extends Component{
                         isLoggedIn:true
                     })
                 })
-
             }
             else{
                 this.props.history.push('/');
@@ -74,12 +74,13 @@ class CreateGame extends Component{
 
     //This logs out the user using req.session.destroy
     logout(){
+        firebase.auth().signOut();
         axios.get('/auth/logout');
     }    
 
     render(){
         const {classes} = this.props;
-        var {isLoggedIn, createGameTitle, createGamePassword} = this.state;
+        var {isLoggedIn} = this.state;
         return(
             
             <div>

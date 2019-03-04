@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import { Stage, Layer, Rect, Transformer } from 'react-konva';
+import { Transformer } from 'react-konva';
 
 //For the moment this code is straight up ripped from https://konvajs.org/docs/react/Transformer.html
 //because I haven't the slightest idea what the hell is going on here
@@ -7,9 +7,7 @@ import { Stage, Layer, Rect, Transformer } from 'react-konva';
 class TransformerComponent extends Component {
 
     componentDidMount() {
-      console.log('TRANSFORMER IS MOUNTING!')
       this.checkNode();
-      
     }
 
     componentDidUpdate() {
