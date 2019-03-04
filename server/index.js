@@ -40,7 +40,11 @@ massive(process.env.CONNECTION_STRING).then(db => {
 	app.set('db', db);
 }).catch(err=>console.log(err));
 
+app.use( express.static( `${__dirname}/../build` ) );
 
+app.get('*', (req, res)=>{
+    res.sendFile(path.join(__dirname, '../build/index.html'));
+});
 //Sockets.io stuff
 const http =require('http').createServer(app);
 const io = require('socket.io')(http);
@@ -209,8 +213,6 @@ app.post('/email/reminder', (req, res) => {
 	})
 	
 })
-http.get('*', (req, res)=>{
-    res.sendFile(path.join(__dirname, '../build/index.html'));
-});
+
 
 http.listen(5050, ()=>console.log("listening on port 5050"));
