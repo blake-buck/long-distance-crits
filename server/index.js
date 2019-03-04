@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const {json} = require('body-parser');
 const massive = require('massive');
@@ -208,5 +209,8 @@ app.post('/email/reminder', (req, res) => {
 	})
 	
 })
+http.get('*', (req, res)=>{
+    res.sendFile(path.join(__dirname, '../build/index.html'));
+});
 
 http.listen(5050, ()=>console.log("listening on port 5050"));
