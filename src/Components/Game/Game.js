@@ -49,9 +49,9 @@ class Game extends Component{
         var {socket} = this.state;    
         
 
-        
 
-        axios.get('/auth/getuser').then(results => {
+
+        axios.get('/auth/getusercookie').then(results => {
             //POSSIBLE ERROR: if results.data is undefined, this should break my code
             if(results.data.username !== undefined){
                 

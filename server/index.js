@@ -51,7 +51,7 @@ app.post('/auth/register', register);
 app.post('/auth/login', login);
 
 app.get('/auth/getusercookie', (req, res) => {
-	console.log('getting User', req.session)
+	//console.log('getting User', req.session)
 	// res.status(200).json(req.session.user);
 	res.json(req.session.user);
 });
@@ -64,7 +64,7 @@ app.get('/api/gamescount', (req, res) => {
 	const db = req.app.get('db');
 
 	db.get_game_count().then(results => {
-		console.log('gamescount', results);
+		//console.log('gamescount', results);
 		res.json(results);
 	})
 })
@@ -76,7 +76,7 @@ app.get('/api/game/:game/questlog', (req, res) => {
 	const db = req.app.get('db');
 	
 	db.get_questlog(req.params.game).then(results => {
-		console.log('results:', results)
+		//console.log('results:', results)
 		res.json(results);
 	})
 })
@@ -93,7 +93,7 @@ app.get('/api/game/:game/canvas', (req, res) => {
 app.post('/api/game/:game/quest', (req, res) => {
 	const db = req.app.get('db');
 	db.get_questlog_id(req.params.game).then(results => {
-		console.log(results[0].questlog_id);
+		//console.log(results[0].questlog_id);
 		db.create_quest(results[0].questlog_id, req.body.title, req.body.description, req.body.objectives).then(results2 =>{
 			res.json(results2);
 		}).catch(err => console.log('error at create_quest', err))
@@ -133,20 +133,18 @@ app.post('/email/reminder', (req, res) => {
 
 	smtpTransport.sendMail(mailOption, (error, info) =>{
 		if(error){
-			console.log("Email did not send");
+			// console.log("Email did not send");
 			res.json(error);
 		}
 		else{
-			console.log("Email successfully sent");
+			// console.log("Email successfully sent");
 			res.json('Email sent: ' + info.response);
 		}
 	})
 	
 })
 
-app.get('*', (req, res)=>{
-    res.sendFile(path.join(__dirname, '../build/index.html'));
-});
+
 
 const http =require('http').createServer(app);
 const io = require('socket.io')(http);
@@ -154,7 +152,7 @@ const io = require('socket.io')(http);
 io.set('origins', '*:*');
 
 io.on('connection', (socket) => {
-	console.log('A USER CONNECTED');
+	// console.log('A USER CONNECTED');
 	var roomID='';
 	var lines  = [];
 	var widths = [];
@@ -171,7 +169,7 @@ io.on('connection', (socket) => {
 
 	
 	socket.on('canvas connection', () => {
-		console.log(lines);
+		//console.log(lines);
 		io.in(roomID).emit('canvas connection', lines);
 	})
 	
@@ -217,10 +215,12 @@ io.on('connection', (socket) => {
 	})
 
 	socket.on("disconnect", () => {
-		console.log("user disconnected");
+		//console.log("user disconnected");
 		lines=[];
 	})
 });
-
+// app.get('*', (req, res)=>{
+//     res.sendFile(path.join(__dirname, '../build/index.html'));
+// });
 
 http.listen(5050, ()=>console.log("listening on port 5050"));

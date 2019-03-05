@@ -51,13 +51,12 @@ class CreateGame extends Component{
     }
 
     componentDidMount(){
+        
         axios.get('/auth/getusercookie').then(results => {
             //If the user successfully logs in they are given a cookie containing their username
             //This checks to see if the user has a username, if they dont they are booted back to the 
             //login page, if they do it gets all the games the user is part of and adds them to state
-            console.log('getting user', results)
             if(results.data.username !==undefined){     
-                console.log('user is defined on front end');
                 axios.get('/api/games').then(games => {
                     console.log("GAMES.DATA here", games.data)
                     this.setState({
@@ -69,7 +68,6 @@ class CreateGame extends Component{
                 })
             }
             else{
-                console.log('user is not defined on front end')
                 this.props.history.push('/');
             }
         })
