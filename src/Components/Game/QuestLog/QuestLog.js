@@ -43,7 +43,7 @@ class QuestLog extends Component{
     }
 
     componentDidMount(){
-        var {questLog} = this.state;
+        var {questLog} = this.props;
         if(questLog[0]){
             this.setState({
                 questLog:questLog, 
@@ -89,11 +89,15 @@ class QuestLog extends Component{
     createQuest(){
         var {questLog} = this.state;
         var {socket} = this.props;
+        console.log('this.props.gameID', this.props.gameID);
         axios.post(`/api/game/${this.props.gameID}/quest`, {title:'New Quest', description:'Description', objectives:'Objectives'}).then((results) => {
+            console.log('creating quest in questlog');
             questLog.push(results.data[0])
             this.props.updateQuestLog(questLog);
-            socket.emit('questLog', questLog);
             this.setState({questLog})
+            socket.emit('questLog', questLog);
+            console.log(questLog);
+            this.componentDidUpdate();
         });
 
     }
@@ -107,16 +111,19 @@ class QuestLog extends Component{
         var title = questLog[selectedQuest].title;
         var description = questLog[selectedQuest].description;
         var objectives = questLog[selectedQuest].objectives;
-        axios.put(`/api/game/${this.props.gameID}/quest`, {quest_id, title, description, objectives});
+        axios.put(`/api/game/${this.props.gameID}/quest`, {quest_id, title, description, objectives}).then(()=>{
+            
+        });
         this.props.updateQuestLog(questLog);
-        socket.emit('questLog', questLog);
         this.setState({[id]:e.target.value, questLog});
+        socket.emit('questLog', questLog);
+        
     }
 
 
     render(){
         var {classes} = this.props;
-        var {questLog} = this.state;
+        var {questLog, quest_id} = this.state;
 
         return(
             <Grid container spacing={16}>
@@ -145,11 +152,11 @@ class QuestLog extends Component{
                 {this.props.isGM ? 
                 (<Paper className={classes.questPaper}>
                     {this.state.questLog[0] ? <div>
-                        <Input className={classes.questTitle} fullWidth value={this.state.title} onChange={(e)=>{this.handleChange('title', e)}}/>
+                        <Input disabled={quest_id === ''} className={classes.questTitle} fullWidth value={this.state.title} onChange={(e)=>{this.handleChange('title', e)}}/>
 
-                        <Input fullWidth value={this.state.description} onChange={(e)=>{this.handleChange('description', e)}}/>
+                        <Input disabled={quest_id === ''} fullWidth value={this.state.description} onChange={(e)=>{this.handleChange('description', e)}}/>
 
-                        <Input className={classes.questObjectives} fullWidth multiline rows={Math.floor(window.innerHeight/28)} value={this.state.objectives} onChange={(e)=>{this.handleChange('objectives', e)}}/></div> : <Typography component='h2' variant='h2'>You havent created a quest yet!</Typography>}
+                        <Input disabled={quest_id === ''} className={classes.questObjectives} fullWidth multiline rows={Math.floor(window.innerHeight/28)} value={this.state.objectives} onChange={(e)=>{this.handleChange('objectives', e)}}/></div> : <Typography component='h2' variant='h2'>You havent created a quest yet!</Typography>}
                     
                 </Paper>)
                 :

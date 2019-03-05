@@ -72,7 +72,10 @@ class Game extends Component{
                                 axios.get(`/api/game/${room}/questlog`).then(results4 => {
                                     axios.get(`/api/game/${room}/canvas`).then(results5 => {
                                         this.props.updateQuestLog(results4.data);
-                                        this.setState({isAuthorized:true, isGM:true, username:results.data.username, charsheet:results3.value.data[0], questLog:results4.data, width:results5.data[0].canvas_width, height:results5.data[0].canvas_height})
+                                        firebase.auth().signInAnonymously().then(results6 => {
+                                            this.setState({isAuthorized:true, isGM:true, username:results.data.username, charsheet:results3.value.data[0], questLog:results4.data, width:results5.data[0].canvas_width, height:results5.data[0].canvas_height})
+                                        }).catch(err=>alert(err));
+                                        
                                     })
                                     
                                 })
