@@ -42,10 +42,112 @@ massive(process.env.CONNECTION_STRING).then(db => {
 
 app.use( express.static( `${__dirname}/../build` ) );
 
+
+//Sockets.io stuff
+
+
+
+app.post('/auth/register', register);
+app.post('/auth/login', login);
+
+app.get('/auth/getusercookie', (req, res) => {
+	console.log('getting User', req.session)
+	// res.status(200).json(req.session.user);
+	res.json(req.session.user);
+});
+
+
+app.get('/auth/logout', logout);
+
+
+app.get('/api/gamescount', (req, res) => {
+	const db = req.app.get('db');
+
+	db.get_game_count().then(results => {
+		console.log('gamescount', results);
+		res.json(results);
+	})
+})
+app.get('/api/games', findGamesForUser);
+app.get('/api/users/:game', getUsersInGame);
+app.get('/api/user/:game/charsheet', getCharsheet);
+
+app.get('/api/game/:game/questlog', (req, res) => {
+	const db = req.app.get('db');
+	
+	db.get_questlog(req.params.game).then(results => {
+		console.log('results:', results)
+		res.json(results);
+	})
+})
+
+app.get('/api/game/:game', getGameCardInfo);
+
+app.get('/api/game/:game/canvas', (req, res) => {
+	const db = req.app.get('db');
+	db.get_game_canvas_dimensions(req.params.game).then(results => {
+		res.json(results);
+	})
+})
+
+app.post('/api/game/:game/quest', (req, res) => {
+	const db = req.app.get('db');
+	db.get_questlog_id(req.params.game).then(results => {
+		console.log(results[0].questlog_id);
+		db.create_quest(results[0].questlog_id, req.body.title, req.body.description, req.body.objectives).then(results2 =>{
+			res.json(results2);
+		}).catch(err => console.log('error at create_quest', err))
+	}).catch( err => console.log('error at get_questlog_id', err))
+	
+})
+app.post('/api/game/:game/quest/delete', (req, res) => {
+	const db = req.app.get('db');
+	db.delete_quest(req.body.quest_id).then(results => {
+		res.json('deleted quest');
+	})
+})
+app.put('/api/game/:game/quest', (req, res) => {
+	const db = req.app.get('db');
+	db.update_quest(req.body.quest_id, req.body.title, req.body.description, req.body.objectives).then(results => {
+		res.json('updated quest');
+	})
+})
+
+
+app.post('/api/game', createGame);
+app.post('/api/useringame', joinGame);
+
+app.put('/api/user/:game/charsheet', updateCharsheet);
+
+app.delete('/api/:game', deleteGame);
+
+app.post('/email/reminder', (req, res) => {
+	
+	
+	var mailOption ={
+		from:		process.env.GMAIL_AUTH_USERNAME,
+		to:			req.body.recipients,
+		subject:	'Automatic Long-Distance-Crit reminder',
+		text:		`Just a friendly reminder that you have a game starting on ${req.body.dateTime}`
+	}
+
+	smtpTransport.sendMail(mailOption, (error, info) =>{
+		if(error){
+			console.log("Email did not send");
+			res.json(error);
+		}
+		else{
+			console.log("Email successfully sent");
+			res.json('Email sent: ' + info.response);
+		}
+	})
+	
+})
+
 app.get('*', (req, res)=>{
     res.sendFile(path.join(__dirname, '../build/index.html'));
 });
-//Sockets.io stuff
+
 const http =require('http').createServer(app);
 const io = require('socket.io')(http);
 
@@ -119,100 +221,6 @@ io.on('connection', (socket) => {
 		lines=[];
 	})
 });
-
-app.get('/auth/getuser', getUser);
-app.get('/auth/logout', logout);
-app.post('/auth/register', register);
-app.post('/auth/login', login);
-
-
-
-app.get('/api/gamescount', (req, res) => {
-	const db = req.app.get('db');
-
-	db.get_game_count().then(results => {
-		console.log('gamescount', results);
-		res.json(results);
-	})
-})
-app.get('/api/games', findGamesForUser);
-app.get('/api/users/:game', getUsersInGame);
-app.get('/api/user/:game/charsheet', getCharsheet);
-
-app.get('/api/game/:game/questlog', (req, res) => {
-	const db = req.app.get('db');
-	
-	db.get_questlog(req.params.game).then(results => {
-		console.log('results:', results)
-		res.json(results);
-	})
-})
-
-app.get('/api/game/:game', getGameCardInfo);
-
-app.get('/api/game/:game/canvas', (req, res) => {
-	const db = req.app.get('db');
-	db.get_game_canvas_dimensions(req.params.game).then(results => {
-		res.json(results);
-	})
-})
-
-app.post('/api/game/:game/quest', (req, res) => {
-	const db = req.app.get('db');
-	db.get_questlog_id(req.params.game).then(results => {
-		console.log(results[0].questlog_id);
-		db.create_quest(results[0].questlog_id, req.body.title, req.body.description, req.body.objectives).then(results2 =>{
-			res.json(results2);
-		}).catch(err => console.log('error at create_quest', err))
-	}).catch( err => console.log('error at get_questlog_id', err))
-	
-})
-app.post('/api/game/:game/quest/delete', (req, res) => {
-	const db = req.app.get('db');
-	db.delete_quest(req.body.quest_id).then(results => {
-		res.json('deleted quest');
-	})
-})
-app.put('/api/game/:game/quest', (req, res) => {
-	const db = req.app.get('db');
-	db.update_quest(req.body.quest_id, req.body.title, req.body.description, req.body.objectives).then(results => {
-		res.json('updated quest');
-	})
-})
-
-
-app.post('/api/game', createGame);
-app.post('/api/useringame', joinGame);
-
-app.put('/api/user/:game/charsheet', updateCharsheet);
-
-app.delete('/api/:game', deleteGame);
-
-
-
-
-app.post('/email/reminder', (req, res) => {
-	
-	
-	var mailOption ={
-		from:		process.env.GMAIL_AUTH_USERNAME,
-		to:			req.body.recipients,
-		subject:	'Automatic Long-Distance-Crit reminder',
-		text:		`Just a friendly reminder that you have a game starting on ${req.body.dateTime}`
-	}
-
-	smtpTransport.sendMail(mailOption, (error, info) =>{
-		if(error){
-			console.log("Email did not send");
-			res.json(error);
-		}
-		else{
-			console.log("Email successfully sent");
-			res.json('Email sent: ' + info.response);
-		}
-	})
-	
-})
 
 
 http.listen(5050, ()=>console.log("listening on port 5050"));

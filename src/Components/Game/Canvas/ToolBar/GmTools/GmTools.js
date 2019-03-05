@@ -241,12 +241,14 @@ class GmTools extends Component{
             <Drawer anchor='left' open={gmToolsIsOpen} onClose={()=>this.props.toggleGmToolsIsOpen(!gmToolsIsOpen)}>
                 <Paper>
                     <div className={classes.checkBoxes}>
+
                     <FormControlLabel
                         label='Players can draw'
                         control={
                             <Checkbox checked={playersCanDraw} onChange={()=>{this.props.togglePlayersCanDraw(!playersCanDraw); this.emitCanDraw() }}/>
                         }
                     />
+                    
                     <FormControlLabel
                         label='Players can move'
                         control={

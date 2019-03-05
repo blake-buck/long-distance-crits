@@ -125,9 +125,10 @@ class Login extends Component{
         var {username, password} = this.state;
         axios.post('/auth/login', {username, password}).then((results)=>{
             //if the user enters in the correct information they are pushed to the create game component
-            firebase.auth().signInAnonymously().then(results => {
+            firebase.auth().signInAnonymously().then(results2 => {
+                this.props.history.push(`/creategame`);
             }).catch(err=>alert(err));
-            this.props.history.push(`/creategame`);
+            
         })
     }
 
