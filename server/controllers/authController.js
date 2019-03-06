@@ -30,12 +30,12 @@ function login(req, res){
     const db = req.app.get('db');
     const {username, password}=req.body;
 
-    console.log('logging in');
+    // console.log('logging in');
     db.find_player(username).then(results => {
         if(results[0] && results[0].username){
             bcrypt.compare(password, results[0].hash).then(isAuthorized => {
                 if(isAuthorized){
-                    console.log('User is authorized on backend')
+                    // console.log('User is authorized on backend')
                     req.session.user ={
                         id: results[0].player_id,
                         username: username,
@@ -55,7 +55,7 @@ function login(req, res){
 }
 
 function getUser(req, res) {
-    console.log('getting User', req.session.user)
+    // console.log('getting User', req.session.user)
     res.status(200).json(req.session.user);
 }
 

@@ -89,14 +89,11 @@ class QuestLog extends Component{
     createQuest(){
         var {questLog} = this.state;
         var {socket} = this.props;
-        console.log('this.props.gameID', this.props.gameID);
         axios.post(`/api/game/${this.props.gameID}/quest`, {title:'New Quest', description:'Description', objectives:'Objectives'}).then((results) => {
-            console.log('creating quest in questlog');
             questLog.push(results.data[0])
             this.props.updateQuestLog(questLog);
             this.setState({questLog})
             socket.emit('questLog', questLog);
-            console.log(questLog);
             this.componentDidUpdate();
         });
 
