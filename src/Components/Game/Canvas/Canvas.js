@@ -17,10 +17,10 @@ import Paper from '@material-ui/core/Paper';
 
 const styles = theme => ({
     stageContainer:{
+        overflow:'scroll',
         border:'2px solid black',
         maxWidth:'100vw',
         maxHeight:'90vh',
-        overflow:'auto',
         margin:'auto'
     },
     paper:{

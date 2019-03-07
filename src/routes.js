@@ -6,12 +6,13 @@ import Register from './Components/Register/Register.js';
 import CreateGame from './Components/CreateGame/CreateGame.js';
 import Game from './Components/Game/Game.js';
 
-//<Route path='/register' component={Register} />
+//
 
 export default(
     <Switch>
         <Route path='/game/:id' component={Game} />
         <Route path='/creategame' component={CreateGame}/>
+        <Route path='/register' component={Register} />
         <Route exact path='/' component={Login} />
     </Switch>
 )

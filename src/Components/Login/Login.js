@@ -186,7 +186,10 @@ class Login extends Component{
                             Login
                         </Button>
                         
-                        
+                        <Button component={Link} to='/register'>
+                            Not a user?
+                        </Button>
+
                         </form>
                     </CardActions>
                     

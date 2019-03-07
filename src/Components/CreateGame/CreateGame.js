@@ -58,7 +58,6 @@ class CreateGame extends Component{
             //login page, if they do it gets all the games the user is part of and adds them to state
             if(results.data.username !==undefined){     
                 axios.get('/api/games').then(games => {
-                    console.log("GAMES.DATA here", games.data)
                     this.setState({
                         username:results.data.username,
                         player_id:results.data.id,

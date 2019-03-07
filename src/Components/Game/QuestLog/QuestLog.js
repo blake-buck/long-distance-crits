@@ -153,7 +153,7 @@ class QuestLog extends Component{
 
                         <Input disabled={quest_id === ''} fullWidth value={this.state.description} onChange={(e)=>{this.handleChange('description', e)}}/>
 
-                        <Input disabled={quest_id === ''} className={classes.questObjectives} fullWidth multiline rows={Math.floor(window.innerHeight/28)} value={this.state.objectives} onChange={(e)=>{this.handleChange('objectives', e)}}/></div> : <Typography component='h2' variant='h2'>You havent created a quest yet!</Typography>}
+                        <Input disabled={quest_id === ''} className={classes.questObjectives} fullWidth multiline rows={Math.floor(window.innerHeight/27)} value={this.state.objectives} onChange={(e)=>{this.handleChange('objectives', e)}}/></div> : <Typography component='h2' variant='h2'>You havent created a quest yet!</Typography>}
                     
                 </Paper>)
                 :

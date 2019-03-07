@@ -16,23 +16,38 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 import { FormControl } from '@material-ui/core';
 
 const styles = theme =>({
-    appbar:{
-        paddingTop:5,
-        paddingBottom:5
+    toolbar:{
+        [ theme.breakpoints.down('sm')]:{
+            display:'flex',
+            justifyContent:'center',
+        },
+        [ theme.breakpoints.up('md')]:{
+        display:'flex',
+        justifyContent:'space-between',
+        paddingTop:'.5vh',
+        paddingBottom:'.5vh'
+        }
     },
     cardContent:{
         backgroundColor:'#3F51B5',
-        color:'white'
+        color:'white',
+        [ theme.breakpoints.down('sm')]:{
+            backgroundColor:'white',
+            color:'black'
+        },
+        
     },
     container:{
         display:'flex',
         width:'100%',
         justifyContent:'space-around',
         alignItems:'center',
-        marginTop:'3%'
+        marginTop:'8vh',
+        
     },
     img:{
         [ theme.breakpoints.down('sm')]:{display:'none'},
@@ -41,13 +56,25 @@ const styles = theme =>({
             width:'40%',
             height:'90vh',
             margin:0,
-            minHeight:500
+            marginTop:'1%'
+        },
+        [ theme.breakpoints.up('lg')]:
+        {
+            width:'40%',
+            height:'90vh',
+            margin:0,
+            minHeight:500,
+            marginTop:'1%'
         }
     },
+    diceIcon:{
+        height:'7vh',
+        [ theme.breakpoints.down('sm')]:{display:'none'},
+    },
     card:{
-        height:350,
-        [ theme.breakpoints.down('sm')]:{width:'100%'},
-        [ theme.breakpoints.up('md')]:{maxWidth:500, width:'30%'}
+        
+        [ theme.breakpoints.down('sm')]:{width:'100%', height:'100vh'},
+        [ theme.breakpoints.up('md')]:{maxWidth:500, width:'30%', height:330}
     },
     cardActions:{
         display:'flex',
@@ -69,7 +96,8 @@ class Register extends Component{
             username:'',
             password:'',
             confirmPassword:'',
-            openDialog:false
+            openDialog:false,
+            displayD20URL:'https://firebasestorage.googleapis.com/v0/b/long-distance-crits.appspot.com/o/displayImages%2Fdisplayd20.png?alt=media&token=e18372ed-b6d2-4669-af48-24574a8ffcdd'
         }
         this.handleChange = this.handleChange.bind(this);
     }
@@ -101,10 +129,15 @@ class Register extends Component{
         var {classes} = this.props;
         return(
             <div>
-            <AppBar className={classes.appbar}>
-                <Typography variant='h6' component='h1' color='inherit'>
+            <AppBar>
+                <Toolbar className={classes.toolbar}>
+                
+                <img src={this.state.displayD20URL} alt='1d20' className={classes.diceIcon} />
+
+                <Typography variant='h5' component='h3' color='inherit'>
                     Long Distance Crits
                 </Typography>
+                </Toolbar>
             </AppBar>
             <div className={classes.container}>
                 <Dialog open={openDialog} onClose={()=>this.closeDialog()}>
