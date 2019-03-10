@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
+import LoadingScreen from '../..//LoadingScreen/LoadingScreen.js';
 
 //Material UI imports
 import PropTypes from 'prop-types';
@@ -50,7 +51,9 @@ class GameCard extends Component{
     render(){
         const {classes} = this.props;
         return(
-            <Card>
+            <div>
+            {this.state.gameTitle === '' ? <LoadingScreen /> :
+            (<Card>
                 <CardContent className={classes.cardContent}>
                     <Typography component='h6' variant='h6'>
                         {this.state.gameTitle}
@@ -69,7 +72,11 @@ class GameCard extends Component{
                     </Button>
                     <Button onClick={()=>this.deleteGame()} color='secondary'>Leave Game</Button>
                 </CardContent>
-            </Card>
+            </Card>)
+            }
+            
+
+            </div>
         );
     }
 

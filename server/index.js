@@ -15,8 +15,9 @@ const auth = require('./middleware/auth.js');
 const app = express();
 
 const smtpTransport = nodemailer.createTransport({
-	service:'gmail',
-	host:'smtp.gmail.com',
+	host:'smtp-mail.outlook.com',
+	port:587,
+	
 	auth:{
 		user:process.env.GMAIL_AUTH_USERNAME,
 		pass:process.env.GMAIL_AUTH_PASSWORD
@@ -133,11 +134,11 @@ app.post('/email/reminder', (req, res) => {
 
 	smtpTransport.sendMail(mailOption, (error, info) =>{
 		if(error){
-			// console.log("Email did not send");
+			console.log("Email did not send", error);
 			res.json(error);
 		}
 		else{
-			// console.log("Email successfully sent");
+			console.log("Email successfully sent");
 			res.json('Email sent: ' + info.response);
 		}
 	})

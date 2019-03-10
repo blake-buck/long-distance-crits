@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
+import firebase from '../../firebase'
 
 //Material UI imports
 import PropTypes from 'prop-types';
@@ -116,7 +117,9 @@ class Register extends Component{
         }
         else{
             axios.post('/auth/register',{username, password}).then(()=>{
-                this.props.history.push('/creategame');
+                firebase.auth().signInAnonymously().then(results2 => {
+                    this.props.history.push(`/creategame`);
+                }).catch(err=>alert(err));
             })
         }
     }

@@ -278,7 +278,7 @@ class Canvas extends Component{
                  
         </div>
         
-        <ToolBar isGM={this.props.isGM} socket={this.props.socket} username={this.props.username} gameID={this.props.gameID}/>
+        <ToolBar isGM={this.props.isGM} socket={this.props.socket} username={this.props.username} gameID={this.props.gameID} width={this.props.width} height={this.props.height}/>
         
         </Paper>
         );

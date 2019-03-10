@@ -72,9 +72,9 @@ class Game extends Component{
                                 axios.get(`/api/game/${room}/questlog`).then(results4 => {
                                     axios.get(`/api/game/${room}/canvas`).then(results5 => {
                                         this.props.updateQuestLog(results4.data);
-                                        firebase.auth().signInAnonymously().then(results6 => {
+                                       // firebase.auth().signInAnonymously().then(results6 => {
                                             this.setState({isAuthorized:true, isGM:true, username:results.data.username, charsheet:results3.value.data[0], questLog:results4.data, width:results5.data[0].canvas_width, height:results5.data[0].canvas_height})
-                                        }).catch(err=>alert(err));
+                                       // }).catch(err=>alert(err));
                                         
                                     })
                                     
@@ -87,6 +87,7 @@ class Game extends Component{
                                 axios.get(`/api/game/${room}/questlog`).then(results4 => {
                                     axios.get(`/api/game/${room}/canvas`).then(results5 => {
                                         this.props.updateQuestLog(results4.data);
+                                        
                                         this.setState({isAuthorized:true, isGM:false, username:results.data.username, charsheet:results3.value.data[0], questLog:results4.data, width:results5.data[0].canvas_width, height:results5.data[0].canvas_height})
                                     })
                                     
@@ -199,7 +200,7 @@ class Game extends Component{
                     <Tabs value={tabValue} onChange={this.handleTabChange} className={classes.tabs}>
                         <Tab label='Canvas'/>
                         <Tab label='Quest Log'/>
-                        <Tab label='Char Sheet'/>
+                        <Tab label='Character Sheet'/>
                     </Tabs>
                     
                     <Grid container>

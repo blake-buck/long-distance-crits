@@ -103,7 +103,7 @@ class CharSheet extends Component{
 
                     <SmallField label='Wisdom' desktopWidth={12} defaultValue={charsheet.wis} type='text' game={this.props.gameID} columnTitle='wis' charsheet={charsheet} />
 
-                    <SmallField label='Charisma' desktopWidth={12} defaultValue={charsheet.cha} type='number' game={this.props.gameID} columnTitle='cha' charsheet={charsheet} />
+                    <SmallField label='Charisma' desktopWidth={12} defaultValue={charsheet.cha} type='text' game={this.props.gameID} columnTitle='cha' charsheet={charsheet} />
                     
                     </Grid>
                     </Grid>

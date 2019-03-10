@@ -51,7 +51,7 @@ class Chat extends Component{
         })
 
         socket.on('chat message', (message) => {
-            messages.push({message, username:this.state.username });
+            messages.unshift({message, username:this.state.username });
             this.setState({messages});
         })
 
@@ -60,31 +60,47 @@ class Chat extends Component{
         e.preventDefault();
         var {inputContent} = this.state;
         if(inputContent.substring(0, 5) ==='/roll'){
-            // /roll 1d20
-            // 0123456789
-            var numberOfDice =0;
-            var numberOfSides = 0;
-            var indivDice = [];
-            var total =0;
+            var total=0;
+            var operations='';
 
-            if(+(inputContent.substring(6, 7)) > 0){
-                numberOfDice=+(inputContent.substring(6, 7));
-            }
-            if(+(inputContent.substring(8, inputContent.length)) > 0){
-                numberOfSides = +(inputContent.substring(8, inputContent.length));
-            }
-            for(var i=0; i<numberOfDice; i++){
-                var dieRoll = Math.floor(Math.random()*numberOfSides+1)
-                if(numberOfDice>1)indivDice.push(dieRoll);
-                total += dieRoll;
-            }
-            if(numberOfDice>1){
-                indivDice = indivDice.join(' + ');
-                indivDice += ' = ';
-            }
+            var diceArr = inputContent.split('');
+            var spacesRemoved=[]
+            diceArr.splice(0, 5);
+            diceArr.map((val) => {
+                if(val !== ' '){
+                    spacesRemoved.push(val);
+                }
+            })
 
-            this.state.socket.emit('chat message', `!${this.state.username} rolled ${numberOfDice}d${numberOfSides}`);
-            this.state.socket.emit('chat message', `!${indivDice}${total}`);
+            var diceSets= [];
+            var currentSet=[];
+            spacesRemoved.map(val => {
+                if(val !== '+' && val !=='d'){
+                    currentSet.push(val)
+                }
+                else{
+                    diceSets.push(+(currentSet.join('')))
+                    currentSet=[];
+                }
+
+            })
+            diceSets.push(+(currentSet.join('')))
+
+            for(var i=0; i<diceSets.length; i+=2){
+                for(var j=0; j<diceSets[i]; j++){
+                    var dieRoll = Math.floor(Math.random()*diceSets[i+1]+1)
+                    operations += `${dieRoll} + `
+                    total += dieRoll;
+                }
+            }
+            operations = operations.split('');
+            for(var i=0; i<3; i++){
+                operations.pop();
+            }
+            operations = operations.join('')
+
+            this.state.socket.emit('chat message', `!${this.state.username} rolled ${diceArr.join('')}`);
+            this.state.socket.emit('chat message', `!${operations} = ${total}`);
         }
         else{
             this.state.socket.emit('chat message', `${this.state.username.charAt(0)}${this.state.inputContent}`);

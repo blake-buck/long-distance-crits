@@ -49,11 +49,12 @@ class JoinGame extends Component{
                         Join a game
                     </DialogTitle>
 
-                    <DialogActions>
-                            <Input placeholder={'Title'} defaultValue={title} onChange={(e)=>this.handleChange('title', e)}/>
-                            <Input placeholder={'Password'} defaultValue={password} onChange={(e)=>this.handleChange('password', e)}/>
-                            <Button onClick={()=>{this.toggleDialog()}}>Cancel</Button>
-                            <Button onClick={()=>{this.joinGame(); this.toggleDialog();}}>Join</Button>
+                    <Input placeholder={'Title'} fullWidth defaultValue={title} onChange={(e)=>this.handleChange('title', e)}/>
+                    <Input placeholder={'Password'} fullWidth defaultValue={password} onChange={(e)=>this.handleChange('password', e)}/>
+
+                    <DialogActions>    
+                        <Button fullWidth onClick={()=>{this.toggleDialog()}}>Cancel</Button>
+                        <Button fullWidth onClick={()=>{this.joinGame(); this.toggleDialog();}}>Join</Button>
                     </DialogActions>
                     
                 </Dialog>

@@ -26,7 +26,7 @@ class ToolBar extends Component{
         var {gmToolsIsOpen, classes, isGM} = this.props;
         return(
             <Paper>
-                <GmTools socket={this.props.socket} username={this.props.username} gameID={this.props.gameID}/>
+                <GmTools socket={this.props.socket} username={this.props.username} gameID={this.props.gameID} width={this.props.width} height={this.props.height}/>
                 <Grid container className={classes.toolbar} >
                 <Grid item xs={3}>
                     {isGM ?<Button onClick={()=>this.props.toggleGmToolsIsOpen(!gmToolsIsOpen)}>Open GM Tools</Button> : <div /> }

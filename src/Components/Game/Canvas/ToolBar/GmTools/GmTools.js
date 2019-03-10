@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {toggleGmToolsIsOpen, togglePlayersCanDraw, clearCanvas, toggleDisplayGrid,togglePlayersCanMove, updateTokens, updateActiveTokens, updateTokenXPos, updateTokenYPos,  updateScaleX, updateScaleY, updateRotation, updateLines, updateStrokeColors, updateStrokeWidths, updateBackgroundImage, updateBackgroundImages} from '../../../../../ducks/reducer';
+import {toggleGmToolsIsOpen, togglePlayersCanDraw, clearCanvas, toggleDisplayGrid,togglePlayersCanMove, updateTokens, updateActiveTokens, updateTokenXPos, updateTokenYPos,  updateScaleX, updateScaleY, updateRotation, updateLines, updateStrokeColors, updateStrokeWidths, updateBackgroundImage, updateBackgroundImages, updateSelectedTool} from '../../../../../ducks/reducer';
 import SetReminder from '../../../SetReminder/SetReminder.js';
 import firebase from '../../../../../firebase.js';
 
@@ -18,6 +18,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import Snackbar from '@material-ui/core/Snackbar';
+import Done from '@material-ui/icons/Done';
 
 const styles = theme => ({
     checkBoxes:{
@@ -50,6 +52,11 @@ const styles = theme => ({
         [ theme.breakpoints.up('md')]:{
         display:'none'
         }
+    },
+    buttonDiv:{
+        borderBottom:'1px solid black',
+        display:'flex',
+        flexDirection:'column'
     }
 })
 
@@ -58,12 +65,17 @@ class GmTools extends Component{
         super(props);
         this.state={
             tokensDialogOpen:false,
-            backgroundImageDialogOpen:false
+            backgroundImageDialogOpen:false,
+            snackBarOpen:false
         }
     }
 
     componentDidMount(){
         
+    }
+
+    handleSnackbarClose(){
+        this.setState({snackBarOpen:false})
     }
 
     emitCanDraw(){
@@ -179,8 +191,8 @@ class GmTools extends Component{
         var {activeTokens, tokenXPos, tokenYPos, scaleX, scaleY, rotation, lines, strokeWidths, strokeColors, socket, backgroundImage} = this.props;
         firebase.storage().ref(`tokens/${this.props.username}/${imageName}`).getDownloadURL().then((url) =>{
             activeTokens.push(url);
-            tokenXPos.push(0);
-            tokenYPos.push(0);
+            tokenXPos.push(this.props.width/2);
+            tokenYPos.push(this.props.height/2);
             scaleX.push(1);
             scaleY.push(1);
             rotation.push(0);
@@ -197,15 +209,17 @@ class GmTools extends Component{
                 activeTokens:activeTokens,
                 backgroundImage:backgroundImage
             }).catch(err => console.log('ERROR AT DOWNLOAD IMAGE INTERIOR', err))
+                this.props.updateSelectedTool('pan')
                 this.props.updateActiveTokens(activeTokens);
                 this.props.updateTokenXPos(tokenXPos);
                 this.props.updateTokenYPos(tokenYPos);
                 this.props.updateScaleX(scaleX);
                 this.props.updateScaleY(scaleY);
                 this.props.updateRotation(rotation);
+                this.setState({snackBarOpen:true})
 
                 socket.emit('activeTokens', activeTokens);
-                socket.emit('token transform', [1, 1, 0, 0, 0, activeTokens.length-1])
+                socket.emit('token transform', [1, 1, 0, this.props.width/2, this.props.height/2, activeTokens.length-1])
             
         }).catch(err => console.log('ERROR AT DOWNLOAD IMAGE EXTERIOR', err))
         
@@ -261,6 +275,7 @@ class GmTools extends Component{
                             <Checkbox checked={displayGrid} onChange={()=>{this.toggleDisplayGrid()}}/>
                         }
                     />
+                    <div className={classes.buttonDiv}>
                     <InputLabel>
                     Upload Token
                     <Input type='file' onChange={(e)=>this.uploadToken(e)} className='fileUploaderInput'/>
@@ -270,18 +285,24 @@ class GmTools extends Component{
                     Upload Background
                     <Input type='file' onChange={(e)=>this.uploadBackgroundImage(e)} placeholder='Upload Background' />
                     </InputLabel>
+                    </div>
                     
+                    <div className={classes.buttonDiv}>
                     <Button  onClick={()=>this.setState({tokensDialogOpen:true})}>Add Token</Button>
                     <Button  onClick={()=>this.setState({backgroundImageDialogOpen:true})}>Add Background</Button>
-                    
+                    </div>
+
+                    <div className={classes.buttonDiv}>
                     <Button onClick={()=>this.emitClearBackgroundImage()}>Clear Background</Button>
                     <Button  onClick={()=>this.emitClearCanvas()}>Clear Drawings</Button>
                     <Button  onClick={()=>this.emitClearTokens()}>Clear Tokens</Button>
-
-                    
                     </div>
                     
+                    </div>
+                
+                
                 <SetReminder />
+               
                 <Button className={classes.closeDrawerButton} onClick={()=>this.props.toggleGmToolsIsOpen(false)}>Close Drawer</Button>
 
                 </Paper>
@@ -300,7 +321,7 @@ class GmTools extends Component{
                 })
                 }
                 <DialogActions>
-                    <Button fullWidth color='secondary' onClick={()=>this.setState({tokensDialogOpen:false})}>Cancel</Button>
+                    <Button fullWidth color='secondary' onClick={()=>this.setState({tokensDialogOpen:false})}>Close</Button>
                 </DialogActions>
             </Dialog>
 
@@ -317,9 +338,20 @@ class GmTools extends Component{
                     })
                 }
                 <DialogActions>
-                <Button fullWidth color='secondary' onClick={()=>this.setState({backgroundImageDialogOpen:false})}>Cancel</Button>
+                <Button fullWidth color='secondary' onClick={()=>this.setState({backgroundImageDialogOpen:false})}>Close</Button>
                 </DialogActions>
             </Dialog>
+            
+            <Snackbar
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+            open={this.state.snackBarOpen}
+            message={<span>Icon added to canvas {<Done />}</span> }
+            autoHideDuration={2000}
+            onClose={()=>this.handleSnackbarClose()}
+            />
 
             </div>
         )
@@ -354,4 +386,4 @@ const mapStateToProps =(state) => {
     }
 };
 
-export default withStyles(styles)(connect(mapStateToProps, {toggleGmToolsIsOpen, togglePlayersCanDraw, clearCanvas, toggleDisplayGrid, togglePlayersCanMove, updateTokens, updateActiveTokens,updateTokenXPos, updateTokenYPos,  updateScaleX, updateScaleY, updateRotation, updateLines, updateStrokeColors, updateStrokeWidths, updateBackgroundImage, updateBackgroundImages})(GmTools));
+export default withStyles(styles)(connect(mapStateToProps, {toggleGmToolsIsOpen, togglePlayersCanDraw, clearCanvas, toggleDisplayGrid, togglePlayersCanMove, updateTokens, updateActiveTokens,updateTokenXPos, updateTokenYPos,  updateScaleX, updateScaleY, updateRotation, updateLines, updateStrokeColors, updateStrokeWidths, updateBackgroundImage, updateBackgroundImages, updateSelectedTool})(GmTools));
