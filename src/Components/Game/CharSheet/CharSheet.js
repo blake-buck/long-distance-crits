@@ -144,7 +144,7 @@ class CharSheet extends Component{
                             <DeathSaves charsheet={charsheet} game={this.props.gameID} />
                         </Grid>
 
-                        <BigField label='Attacks & Spellcasting' rows={16} desktopWidth={12} defaultValue={charsheet.attacks_spellcasting} columnTitle='attacks_spellcasting' game={this.props.gameID} charsheet={charsheet}/>
+                        <BigField label='Attacks & Spellcasting' rows={15} desktopWidth={12} defaultValue={charsheet.attacks_spellcasting} columnTitle='attacks_spellcasting' game={this.props.gameID} charsheet={charsheet}/>
 
                     </Grid>
                     </Grid>
@@ -155,7 +155,7 @@ class CharSheet extends Component{
                         
                         <BigField label='Features & Traits' rows={14} desktopWidth={12} defaultValue={charsheet.features_traits} columnTitle='features_traits' game={this.props.gameID} charsheet={charsheet}/>
 
-                        <BigField label='Equipment' rows={30} desktopWidth={12} defaultValue={charsheet.equipment} columnTitle='equipment' game={this.props.gameID} charsheet={charsheet}/>
+                        <BigField label='Equipment' rows={27} desktopWidth={12} defaultValue={charsheet.equipment} columnTitle='equipment' game={this.props.gameID} charsheet={charsheet}/>
                         
 
                         
@@ -163,17 +163,17 @@ class CharSheet extends Component{
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={3}>
-                    <Grid container spacing={16}>
+                    <Grid container spacing={8}>
 
-                        <BigField label='Personality Traits' rows={8} desktopWidth={12} defaultValue={charsheet.personality} columnTitle='personality' game={this.props.gameID} charsheet={charsheet}/>
+                        <BigField label='Personality Traits' rows={7} desktopWidth={12} defaultValue={charsheet.personality} columnTitle='personality' game={this.props.gameID} charsheet={charsheet}/>
 
-                        <BigField label='Ideals' rows={6} desktopWidth={12} defaultValue={charsheet.ideals} columnTitle='ideals' game={this.props.gameID} charsheet={charsheet}/>
+                        <BigField label='Ideals' rows={5} desktopWidth={12} defaultValue={charsheet.ideals} columnTitle='ideals' game={this.props.gameID} charsheet={charsheet}/>
 
-                        <BigField label='Bonds' rows={6} desktopWidth={12} defaultValue={charsheet.bonds} columnTitle='bonds' game={this.props.gameID} charsheet={charsheet}/>
+                        <BigField label='Bonds' rows={5} desktopWidth={12} defaultValue={charsheet.bonds} columnTitle='bonds' game={this.props.gameID} charsheet={charsheet}/>
 
-                        <BigField label='Flaws' rows={6} desktopWidth={12} defaultValue={charsheet.flaws} columnTitle='flaws' game={this.props.gameID} charsheet={charsheet}/>
+                        <BigField label='Flaws' rows={5} desktopWidth={12} defaultValue={charsheet.flaws} columnTitle='flaws' game={this.props.gameID} charsheet={charsheet}/>
 
-                        <BigField label='Other Proficiencies & Languages' rows={10} desktopWidth={12} defaultValue={charsheet.languages_proficiencies} columnTitle='languages_proficiencies' game={this.props.gameID} charsheet={charsheet}/>
+                        <BigField label='Other Proficiencies & Languages' rows={9} desktopWidth={12} defaultValue={charsheet.languages_proficiencies} columnTitle='languages_proficiencies' game={this.props.gameID} charsheet={charsheet}/>
 
                     </Grid>
                     </Grid>

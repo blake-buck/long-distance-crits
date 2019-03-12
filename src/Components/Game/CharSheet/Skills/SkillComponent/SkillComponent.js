@@ -47,7 +47,7 @@ class SkillComponent extends Component{
         }
 
         return(
-            <Grid item>
+            <Grid item xs={12}>
                 <Paper className={classes.itemPaper}>
                     <FormControlLabel
                         classes={{

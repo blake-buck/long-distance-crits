@@ -19,13 +19,11 @@ const styles = theme => ({
     stageContainer:{
         overflow:'scroll',
         border:'2px solid black',
-        maxWidth:'100vw',
-        maxHeight:'90vh',
         margin:'auto'
     },
     paper:{
         height:'96h',
-        
+        maxWidth:'100vw'
     },
     tools:{
         borderTop:'2px solid black'
@@ -238,7 +236,7 @@ class Canvas extends Component{
         <Paper className={classes.paper}>
         
         <div >
-            <Stage width={this.props.width} height={this.props.height} onMouseDown={(e)=>this.beginLine(e)} onMouseMove={(e)=>this.drawLine(e)} onMouseUp={(e)=>this.endLine(e)} className={classes.stageContainer}>
+            <Stage style={{maxWidth:this.props.width, maxHeight:this.props.maxHeight}} width={this.props.width} height={this.props.height} onMouseDown={(e)=>this.beginLine(e)} onMouseMove={(e)=>this.drawLine(e)} onMouseUp={(e)=>this.endLine(e)} className={classes.stageContainer}>
                 <Layer>
 
                     <BackgroundImage canvasWidth={this.props.width} canvasHeight={this.props.height} src={this.state.backgroundImage} />

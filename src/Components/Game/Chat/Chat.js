@@ -86,6 +86,9 @@ class Chat extends Component{
             })
             diceSets.push(+(currentSet.join('')))
 
+            var finalNumber = 0;
+            if(diceSets.length % 2 !== 0)finalNumber +=diceSets.pop();
+
             for(var i=0; i<diceSets.length; i+=2){
                 for(var j=0; j<diceSets[i]; j++){
                     var dieRoll = Math.floor(Math.random()*diceSets[i+1]+1)
@@ -93,10 +96,16 @@ class Chat extends Component{
                     total += dieRoll;
                 }
             }
+
+            total += finalNumber;
+            
+
             operations = operations.split('');
             for(var i=0; i<3; i++){
                 operations.pop();
             }
+            if(finalNumber !== 0)operations.push(` + ${finalNumber}`)
+
             operations = operations.join('')
 
             this.state.socket.emit('chat message', `!${this.state.username} rolled ${diceArr.join('')}`);

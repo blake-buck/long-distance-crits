@@ -107,7 +107,7 @@ class Game extends Component{
             
         })
 
-        firebase.database().ref(`/canvases/${this.props.match.params.id}`).once('value').then((snapshot)=>{;
+        firebase.database().ref(`/canvases/${this.props.match.params.id}`).once('value').then((snapshot)=>{
             if(snapshot.val().lines)            this.props.updateLines(snapshot.val().lines);
             else this.props.updateLines([])
 

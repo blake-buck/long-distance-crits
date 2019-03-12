@@ -6,6 +6,7 @@ const massive = require('massive');
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
+const helmet = require('helmet');
 
 const {register, login, getUser, logout} = require('./controllers/authController.js');
 const {findGamesForUser, createGame, joinGame, getUsersInGame, getCharsheet, getGameCardInfo, updateCharsheet, deleteGame} = require('./controllers/gameController.js');
@@ -13,6 +14,7 @@ const {findGamesForUser, createGame, joinGame, getUsersInGame, getCharsheet, get
 const auth = require('./middleware/auth.js');
 
 const app = express();
+app.use(helmet());
 
 const smtpTransport = nodemailer.createTransport({
 	host:'smtp-mail.outlook.com',
