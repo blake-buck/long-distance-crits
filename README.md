@@ -1,68 +1,59 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Long Distance Crits
 
-In the project directory, you can run:
+The purpose of this app is to allow a group of people to play a game of D&D or any other table-top game over the internet.<br>
 
-### `npm start`
+### Features
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Games Page:<br>
+* create a game, setting the title and password, as well as the size of the canvas to be used in game<br>
+* join a game, by entering the correct title and password of the game in a popup dialog<br>
+* leave a game they are currently in <br>
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+In-game:<br>
+* draw on a canvas with lines of varying size and color <br>
+* upload images to use as tokens, ability to reposition and resize said tokens<br>
+* upload images to use as backgrounds/battlemaps<br>
+* roll virtual dice<br>
+* update a questlog<br>
+* creators of a game can lock other players from being able to draw or move tokens<br>
+* store important game info on a character sheet<br>
 
-### `npm test`
+### Technologies Used
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### Front End
+React.js<br>
+Material-UI<br>
+Konva.js<br>
+axios<br>
+redux<br>
+react-redux<br>
 
-### `npm run build`
+#### Back End
+Node.js<br>
+express<br>
+express-session<br>
+massive<br>
+bcrypt<br>
+Socket.io<br>
+nodemailer<br>
+helmet<br>
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### Database Technologies
+PostgreSQL<br>
+Firebase<br>
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+### Screenshots
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### Games Page
+![View of Games Page](https://firebasestorage.googleapis.com/v0/b/long-distance-crits.appspot.com/o/displayImages%2FReadme%20Pictures%2FLong%20Distance%20Crits%20Games.png?alt=media&token=758a0fa2-cc26-40aa-b99a-d7a23b5585fb "View of Games page")
 
-### `npm run eject`
+#### Canvas Tab
+![View of Canvas Tab](https://firebasestorage.googleapis.com/v0/b/long-distance-crits.appspot.com/o/displayImages%2FReadme%20Pictures%2FLong%20Distance%20Crits%20Canvas.png?alt=media&token=0eaf5334-0dad-4c78-872d-9f8a8a936dd8 "View of Canvas Tab")
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+#### Questlog Tab
+![View of Questlog Tab](https://firebasestorage.googleapis.com/v0/b/long-distance-crits.appspot.com/o/displayImages%2FReadme%20Pictures%2FLong%20Distance%20Crits%20Questlog.png?alt=media&token=af129546-79b8-478e-899f-973f665eb6bb "View of Questlog Tab")
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+#### Character Sheet Tab
+![View of Character Sheet Tab](https://firebasestorage.googleapis.com/v0/b/long-distance-crits.appspot.com/o/displayImages%2FReadme%20Pictures%2FLong%20Distance%20Crits%20Character%20Sheet.png?alt=media&token=93ba9df9-3b65-4da2-b210-a80ea7b3016b "View of Character Sheet Tab")
